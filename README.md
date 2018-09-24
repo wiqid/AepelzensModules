@@ -1,10 +1,11 @@
 # VCV Rack plugins
 
+**This will be a re-release of Aepelzen's modules with a redesign. We plan on
+getting this into the VCV Rack Plugin Manager.**
+
+<!--
 ![screenshot](https://github.com/Aepelzen/AepelzensModules/blob/master/images/screenshot.png)
-
-## Building
-
-New Dependency: [libsndfile](http://www.mega-nerd.com/libsndfile)
+-->
 
 ## New Module: HexMix
 
@@ -19,15 +20,31 @@ graphic below. As you can see, they provide a pretty serious boost
 (±12dB at 100, 1k and 10k Hz), so watch your levels, I'm not clipping
 the output. The Master-EQ is nearly identical but softer (only ±6 db).
 
-![channelEQs](https://github.com/Aepelzen/AepelzensModules/blob/master/images/hexmixFreqResponse.png)
+![channelEQs](https://github.com/wiqid/repelzen/blob/master/images/hexmixFreqResponse.png)
 
 ## New Module: DrumSampler
 
-This is a sampler that can load multiple samples. Samples can be selected manually or by CV. There are 2 ways to load samples. One by one using the '+'-button or loading a whole directory  using the '++' button. This will attempt to load all files in the directory (not recursive), so handle it with care (there is no builtin limit for the samplenumber). For a list of supported formats, see (http://www.mega-nerd.com/libsndfile/#Features). All samples are automatically converted to the global samplerate so you don't have to worry about that.
+This is a sampler that can load multiple samples. Samples can be selected
+manually or by CV. There are 2 ways to load samples. One by one using the
+'+'-button or loading a whole directory  using the '++' button. This will
+attempt to load all files in the directory (not recursive), so handle it
+with care (there is no builtin limit for the samplenumber). For a list of
+supported formats, see (http://www.mega-nerd.com/libsndfile/#Features).
+All samples are automatically converted to the global samplerate so you
+don't have to worry about that.
 
-The basic idea for this module is that you have a directory with similar sounds (like a bunch of different snares for example) or a sliced loop, and modulate the select-input. The small trimpots right below the sample-display set the start, end and gain for each sample individually. Those are infinite encoders so their absoule position doesn't matter. You can see the current values in the sample-display. All other controls affect all samples together.
+The basic idea for this module is that you have a directory with similar
+sounds (like a bunch of different snares for example) or a sliced loop,
+and modulate the select-input. The small trimpots right below the
+sample-display set the start, end and gain for each sample individually.
+Those are infinite encoders so their absoule position doesn't matter. You
+can see the current values in the sample-display. All other controls affect
+all samples together.
 
-This is the first version of this module which might still contain some bugs. Loading of directories almost certainly won't work on Windows and is currently disabled. I might add an envelope later but in the meantime you can patch-in an external envelope through the gain-input. There is also no linear-fm-input atm. but i found that the normal pitch input works quite well for fm sounds.
+This is the first version of this module which might still contain some bugs.
+There is no envelope, but you can patch-in an external envelope through the
+gain-input. There is also no linear FM input. But the normal pitch input works
+quite well for FM sounds.
 
 Tip: If you don't modulate the select-input you are using this wrong ;)
 
@@ -41,7 +58,7 @@ To copy a pattern, select the pattern you want to copy first. Push the copy butt
 
 The switch over the pattern input determines wheater all channel positions should be reset when switching patterns (i. e. start the pattern from the beginning). This might be useful to realign the channels when switching from a pattern that uses different lengths per channel. When inactive the pattern will just keep running.
 
-### Pattern Merging (work in progress)
+### Pattern Merging
 
 You can create new patterns out of existing ones by merging them. The workflow is similar to copying. Select the base-pattern first and push the merge button. Now select another pattern and this new pattern will get merged with the base-pattern according to the merge-mode (selected with the knob below the merge button). The base pattern defines the channel lengths (this might change in future versions). Currently the following merge modes are available:
 * OR
@@ -52,33 +69,44 @@ You can create new patterns out of existing ones by merging them. The workflow i
 
 ## QuadSeq
 
-A four channel sequencer (The knobs are made by bogaudio). Like GateSeq each channel has it's own clock input (the 4 inputs on the bottom left) and length. There is also a global clock input (under the Run button). The mode parameter sets one of the following playback modes:
+A four channel sequencer. Like GateSeq each channel has it's own clock input
+(the 4 inputs on the bottom left) and length. There is also a global clock
+input (under the Run button). The mode parameter sets one of the following
+playback modes:
 * Forward
 * Backwad
 * Alternating
 * Random Neighbour
 * Random
 
-Update: There is a new probability control with 2 modes. At noon it does nothing and everything works as usual. Turning it ccw increases the probability that the current step is repeated. Fully ccw the sequence is stuck at the current step. Turning the knob clockwise increases the probability that the next step is skiped.
-I also added buttons for manual step selection. This is mostly useful for programming sequences (while the sequencer is stopped) and to make it easier to dial in accurate values.
+There is a new probability control with 2 modes. At noon it does nothing and
+everything works as usual. Turning it ccw increases the probability that the
+current step is repeated. Fully ccw the sequence is stuck at the current step.
+Turning the knob clockwise increases the probability that the next step is
+skipped. There are buttons for manual step selection. This is mostly useful
+for programming sequences (while the sequencer is stopped) and to make it
+easier to dial in accurate values.
 
-Finally, i changed the output behaviour. The sequencer now only outputs a signal when it's either running or you hit a manual step select button.
-
-Thanks to [AS](https://github.com/AScustomWorks/AS) for helping me cram all this into such a small panel
+Finally, the sequencer now only outputs a signal when it's either running
+or you hit a manual step select button.
 
 ## Dice
 
-Another sequencer. This one is built around probabilities and comes with all the usual goodies (per
-channel clock, length and playback modes). All unconnected clock inputs are normalised to the first
-clock input. The knobs set the probability for a step to be active. Unfortunately there is not
-enough space for labels but this should be simple enough to work without. The upper knob in the gray
-area sets the channel length, the lower one the playback mode (these work like in QuadSeq). The
-button in the upper left corner resets the playback positions.
+Another sequencer. This one is built around probabilities and comes with all
+the usual goodies (per channel clock, length and playback modes). All
+unconnected clock inputs are normalised to the first clock input. The knobs
+set the probability for a step to be active. Unfortunately there is not enough
+space for labels but this should be simple enough to work without. The upper
+knob sets the channel length, the lower one the playback mode (these work like
+in QuadSeq). The button in the upper left corner resets the playback positions.
 
 ## Burst
 
-A Burst generator. For every received trigger a number of triggers and an accompanying CV signal is sent out.
-Repetitions and time set the number of triggers and the time between them. Acceleration shortens the time between subsequent triggers, jitter shifts them randomly. The switch at the bootom controls the output mode (trigger or gate).
+A Burst generator. For every received trigger a number of triggers and an
+accompanying CV signal is sent out. Repetitions and time set the number of
+triggers and the time between them. Acceleration shortens the time between
+subsequent triggers, while jitter shifts them randomly. The switch at the
+bottom controls the output mode (trigger or gate).
 
 The last trigger also triggers the EOC (end of cycle) output. You can connect this to the trigger input and turn up jitter and/or acceleration to get an irregular clock or chain multiple burst generators together.
 The mode button selects the mode for the CV output, that can be used to modulate pitch or filter cutoff for delay style effects etc. Currently the following modes are supported:
@@ -91,7 +119,6 @@ The mode button selects the mode for the CV output, that can be used to modulate
 * Random Walk
 * Random
 
-If you have ideas for additional CV-Modes or any other suggestions please let me know.
 
 ## Manifold
 
