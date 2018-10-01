@@ -96,4 +96,4 @@ WalkerWidget::WalkerWidget(Walker *module) : ModuleWidget(module) {
     addOutput(Port::create<PJ301MPort>(Vec(30,320), Port::OUTPUT, module, Walker::CV_OUTPUT));
 }
 
-Model *modelWalker = Model::create<Walker, WalkerWidget>("repelzen", "walker", "random walk", UTILITY_TAG, RANDOM_TAG);
+Model *modelWalker = Model::create<Walker, WalkerWidget>("repelzen", "walker", "Random Walk", UTILITY_TAG, RANDOM_TAG);

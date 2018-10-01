@@ -510,4 +510,4 @@ void GateSeq::fromJson(json_t *rootJ) {
     currentPattern = &patterns[8*bank + pattern];
 }
 
-Model *modelGateSeq = Model::create<GateSeq, GateSeqWidget>("repelzen", "gateseq", "gate sequencer", SEQUENCER_TAG);
+Model *modelGateSeq = Model::create<GateSeq, GateSeqWidget>("repelzen", "gateseq", "Gate Sequencer", SEQUENCER_TAG);

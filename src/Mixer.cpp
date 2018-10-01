@@ -253,4 +253,4 @@ struct MixerWidget : ModuleWidget {
     }
 };
 
-Model *modelMixer = Model::create<Mixer, MixerWidget>("repelzen", "mixer", "hexmix", MIXER_TAG);
+Model *modelMixer = Model::create<Mixer, MixerWidget>("repelzen", "mixer", "HexMix", MIXER_TAG);

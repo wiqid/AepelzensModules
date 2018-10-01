@@ -284,4 +284,4 @@ QuadSeqWidget::QuadSeqWidget(QuadSeq *module) : ModuleWidget(module) {
   }
 }
 
-Model *modelQuadSeq = Model::create<QuadSeq, QuadSeqWidget>("repelzen", "quadseq", "quad sequencer", SEQUENCER_TAG);
+Model *modelQuadSeq = Model::create<QuadSeq, QuadSeqWidget>("repelzen", "quadseq", "Quad CV Sequencer", SEQUENCER_TAG);

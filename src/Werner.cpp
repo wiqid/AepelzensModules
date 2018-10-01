@@ -73,4 +73,4 @@ WernerWidget::WernerWidget(Werner *module) : ModuleWidget(module) {
     }
 }
 
-Model *modelWerner = Model::create<Werner, WernerWidget>("repelzen", "werner", "cv-to-trigger", UTILITY_TAG);
+Model *modelWerner = Model::create<Werner, WernerWidget>("repelzen", "werner", "CV-to-Trigger", UTILITY_TAG);

@@ -315,4 +315,4 @@ Menu *ErwinWidget::createContextMenu() {
     return menu;
 }
 
-Model *modelErwin = Model::create<Erwin, ErwinWidget>("repelzen", "erwin", "erwin", UTILITY_TAG);
+Model *modelErwin = Model::create<Erwin, ErwinWidget>("repelzen", "erwin", "Erwin", UTILITY_TAG);

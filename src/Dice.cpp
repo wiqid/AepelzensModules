@@ -160,4 +160,4 @@ DiceWidget::DiceWidget(Dice *module) : ModuleWidget(module) {
     }
 }
 
-Model *modelDice = Model::create<Dice, DiceWidget>("repelzen", "dice", "probability sequencer", SEQUENCER_TAG);
+Model *modelDice = Model::create<Dice, DiceWidget>("repelzen", "dice", "Dice Probability Sequencer", SEQUENCER_TAG);
