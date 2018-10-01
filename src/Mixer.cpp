@@ -1,4 +1,4 @@
-#include "aepelzen.hpp"
+#include "repelzen.hpp"
 #include "AeFilter.hpp"
 #include "dsp/vumeter.hpp"
 #include "dsp/digital.hpp"
@@ -253,4 +253,4 @@ struct MixerWidget : ModuleWidget {
     }
 };
 
-Model *modelMixer = Model::create<Mixer, MixerWidget>("Aepelzens Modules", "Mixer", "HexMix", MIXER_TAG);
+Model *modelMixer = Model::create<Mixer, MixerWidget>("repelzen", "mixer", "hexmix", MIXER_TAG);

@@ -1,4 +1,4 @@
-#include "aepelzen.hpp"
+#include "repelzen.hpp"
 #include "dsp/digital.hpp"
 #include <math.h>
 
@@ -237,4 +237,4 @@ BurstWidget::BurstWidget(Burst *module) : ModuleWidget(module)
   addOutput(Port::create<PJ301MPort>(Vec(60,335), Port::OUTPUT, module, Burst::GATE_OUTPUT));
 }
 
-Model *modelBurst = Model::create<Burst, BurstWidget>("Aepelzens Modules", "burst", "Burst Generator", CLOCK_MODULATOR_TAG, CLOCK_TAG, RANDOM_TAG);
+Model *modelBurst = Model::create<Burst, BurstWidget>("repelzen", "burst", "burst generator", CLOCK_MODULATOR_TAG, CLOCK_TAG, RANDOM_TAG);

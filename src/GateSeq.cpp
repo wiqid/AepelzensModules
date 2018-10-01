@@ -1,4 +1,4 @@
-#include "aepelzen.hpp"
+#include "repelzen.hpp"
 #include "dsp/digital.hpp"
 
 const int NUM_STEPS = 16;
@@ -510,4 +510,4 @@ void GateSeq::fromJson(json_t *rootJ) {
     currentPattern = &patterns[8*bank + pattern];
 }
 
-Model *modelGateSeq = Model::create<GateSeq, GateSeqWidget>("Aepelzens Modules", "GateSEQ", "Gate Sequencer", SEQUENCER_TAG);
+Model *modelGateSeq = Model::create<GateSeq, GateSeqWidget>("repelzen", "gateseq", "gate sequencer", SEQUENCER_TAG);

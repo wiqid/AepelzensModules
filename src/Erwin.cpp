@@ -1,4 +1,4 @@
-#include "aepelzen.hpp"
+#include "repelzen.hpp"
 #include "dsp/digital.hpp"
 #include "osdialog.h"
 #include <math.h>
@@ -315,4 +315,4 @@ Menu *ErwinWidget::createContextMenu() {
     return menu;
 }
 
-Model *modelErwin = Model::create<Erwin, ErwinWidget>("Aepelzens Modules", "Erwin", "Erwin", UTILITY_TAG);
+Model *modelErwin = Model::create<Erwin, ErwinWidget>("repelzen", "erwin", "erwin", UTILITY_TAG);

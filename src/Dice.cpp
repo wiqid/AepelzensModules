@@ -1,4 +1,4 @@
-#include "aepelzen.hpp"
+#include "repelzen.hpp"
 #include "dsp/digital.hpp"
 
 #define NUM_CHANNELS 4
@@ -76,7 +76,7 @@ void Dice::step() {
 	    int mode = clamp((int)roundf(params[CHANNEL_MODE_PARAM + y].value),0,5);
 	    gatePulse[y].trigger(1e-3);
 	    randomValue = randomUniform();
-	    
+
 	    if (mode == MODE_RANDOM_NEIGHBOUR) {
 		mode = (randomUniform() > 0.5) ? MODE_FORWARD : MODE_BACKWARD;
 	    }
@@ -109,16 +109,16 @@ void Dice::step() {
 	    case MODE_RANDOM:
 		channel_index[y] = rand() % numSteps;
 		break;
-	    }	    
+	    }
 	}
-	
+
 	pulse = gatePulse[y].process(1.0 / engineGetSampleRate());
 	bool gateOn = (randomValue < (params[COLUMN1_PARAM + channel_index[y] + y * 8].value)) ? 1.0 : 0.0;
 	gateOn = gateOn && !pulse;
 	outputs[GATE_OUTPUT + y].value = (gateOn) ? 10.0 : 0.0;
-	
+
 	for(int i=0;i<NUM_STEPS;i++) {
-	    lights[STEP_LIGHT + y*NUM_STEPS + i].value = (i == channel_index[y] ? 1.0 : 0.0);   
+	    lights[STEP_LIGHT + y*NUM_STEPS + i].value = (i == channel_index[y] ? 1.0 : 0.0);
 	}
     }
 
@@ -147,7 +147,7 @@ DiceWidget::DiceWidget(Dice *module) : ModuleWidget(module) {
     }
 
     addParam(ParamWidget::create<LEDButton>(Vec(10, 5), module, Dice::RESET_PARAM, 0.0, 1.0, 0.0));
-    
+
     for(int y=0;y<NUM_CHANNELS;y++) {
 	for(int i=0;i<NUM_STEPS;i++) {
 	    addParam(ParamWidget::create<Trimpot>(Vec(10 + y*27, 30 + i*28), module, Dice::COLUMN1_PARAM + y *NUM_STEPS + i, 0.0, 1.0, 0.0));
@@ -160,4 +160,4 @@ DiceWidget::DiceWidget(Dice *module) : ModuleWidget(module) {
     }
 }
 
-Model *modelDice = Model::create<Dice, DiceWidget>("Aepelzens Modules", "Dice", "Probability Sequencer", SEQUENCER_TAG);
+Model *modelDice = Model::create<Dice, DiceWidget>("repelzen", "dice", "probability sequencer", SEQUENCER_TAG);

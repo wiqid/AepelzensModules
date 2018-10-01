@@ -1,4 +1,4 @@
-#include "aepelzen.hpp"
+#include "repelzen.hpp"
 #include "dsp/digital.hpp"
 #include "dsp/samplerate.hpp"
 
@@ -182,4 +182,4 @@ Menu *FolderWidget::createContextMenu() {
     return menu;
 }
 
-Model *modelFolder = Model::create<Folder, FolderWidget>("Aepelzens Modules", "folder", "Manifold", WAVESHAPER_TAG);
+Model *modelFolder = Model::create<Folder, FolderWidget>("repelzen", "folder", "manifold", WAVESHAPER_TAG, DISTORTION_TAG);

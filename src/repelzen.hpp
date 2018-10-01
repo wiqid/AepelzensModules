@@ -76,5 +76,4 @@ extern Model *modelFolder;
 extern Model *modelWalker;
 extern Model *modelErwin;
 extern Model *modelWerner;
-extern Model *modelAeSampler;
 extern Model *modelMixer;

@@ -1,4 +1,4 @@
-#include "aepelzen.hpp"
+#include "repelzen.hpp"
 #include "dsp/digital.hpp"
 
 #define NUM_CHANNELS 4
@@ -73,4 +73,4 @@ WernerWidget::WernerWidget(Werner *module) : ModuleWidget(module) {
     }
 }
 
-Model *modelWerner = Model::create<Werner, WernerWidget>("Aepelzens Modules", "Werner", "CV-to-Trigger", UTILITY_TAG);
+Model *modelWerner = Model::create<Werner, WernerWidget>("repelzen", "werner", "cv-to-trigger", UTILITY_TAG);

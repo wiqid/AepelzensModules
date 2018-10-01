@@ -1,4 +1,4 @@
-#include "aepelzen.hpp"
+#include "repelzen.hpp"
 #include "dsp/digital.hpp"
 
 #define NUM_CHANNELS 4
@@ -284,4 +284,4 @@ QuadSeqWidget::QuadSeqWidget(QuadSeq *module) : ModuleWidget(module) {
   }
 }
 
-Model *modelQuadSeq = Model::create<QuadSeq, QuadSeqWidget>("Aepelzens Modules", "QuadSeq", "Quad Sequencer", SEQUENCER_TAG);
+Model *modelQuadSeq = Model::create<QuadSeq, QuadSeqWidget>("repelzen", "quadseq", "quad sequencer", SEQUENCER_TAG);
