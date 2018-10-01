@@ -7,7 +7,7 @@ getting this into the VCV Rack Plugin Manager.**
 ![screenshot](https://github.com/Aepelzen/AepelzensModules/blob/master/images/screenshot.png)
 -->
 
-## New Module: HexMix
+## HexMix
 
 You are probably wondering if we really need another mixer. There are
 already various options to choose from and some of them are quite
@@ -21,32 +21,6 @@ graphic below. As you can see, they provide a pretty serious boost
 the output. The Master-EQ is nearly identical but softer (only ±6 db).
 
 ![channelEQs](https://github.com/wiqid/repelzen/blob/master/images/hexmixFreqResponse.png)
-
-## New Module: DrumSampler
-
-This is a sampler that can load multiple samples. Samples can be selected
-manually or by CV. There are 2 ways to load samples. One by one using the
-'+'-button or loading a whole directory  using the '++' button. This will
-attempt to load all files in the directory (not recursive), so handle it
-with care (there is no builtin limit for the samplenumber). For a list of
-supported formats, see (http://www.mega-nerd.com/libsndfile/#Features).
-All samples are automatically converted to the global samplerate so you
-don't have to worry about that.
-
-The basic idea for this module is that you have a directory with similar
-sounds (like a bunch of different snares for example) or a sliced loop,
-and modulate the select-input. The small trimpots right below the
-sample-display set the start, end and gain for each sample individually.
-Those are infinite encoders so their absoule position doesn't matter. You
-can see the current values in the sample-display. All other controls affect
-all samples together.
-
-This is the first version of this module which might still contain some bugs.
-There is no envelope, but you can patch-in an external envelope through the
-gain-input. There is also no linear FM input. But the normal pitch input works
-quite well for FM sounds.
-
-Tip: If you don't modulate the select-input you are using this wrong ;)
 
 ## GateSeq
 
