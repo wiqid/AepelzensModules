@@ -227,7 +227,7 @@ void GateSeq::step() {
     if (resetTrigger.process(params[RESET_PARAM].value + inputs[RESET_INPUT].value)) {
 	phase = 0.0;
 	for (int y = 0; y < NUM_CHANNELS; y++) {
-	    channel_index[y] = 0;
+	    channel_index[y] = -1;
 	}
 	nextStep = true;
 	lights[RESET_LIGHT].value = 1.0;
