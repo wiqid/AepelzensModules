@@ -22,7 +22,6 @@ struct Folder : Module {
 	GATE_OUTPUT,
 	NUM_OUTPUTS
     };
-
     enum LightIds {
 	NUM_LIGHTS
     };
@@ -30,7 +29,7 @@ struct Folder : Module {
     void process(const ProcessArgs &args) override;
 
     Folder() {
-		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+        config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
         configParam(Folder::STAGE_PARAM, 1, 3, 2, "folding stages");
         configParam(Folder::GAIN_PARAM, 0.0, 14.0, 1.0, "folding amount");
         configParam(Folder::GAIN_ATT_PARAM, -1.0, 1.0, 0, "folding amount modulation");
@@ -170,6 +169,7 @@ struct FolderWidget : ModuleWidget {
         FolderMenuItem *altItem = createMenuItem<FolderMenuItem>(
             "Alternative folding algorithm", CHECKMARK(module->alternativeMode)
         );
+        altItem->module = module;
         menu->addChild(altItem);
     }
 
