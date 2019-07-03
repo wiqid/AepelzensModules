@@ -1,0 +1,33 @@
+{
+  "slug": "repelzen",
+  "name": "repelzen",
+  "version": "1.1.0_pre0702",
+  "license": "GPL-3.0-or-later",
+  "brand": "repelzen",
+  "author": "wiqid",
+  "authorEmail": "wiqid@protonmail.com",
+  "authorUrl": "https://github.com/wiqid/",
+  "pluginUrl": "https://github.com/wiqid/repelzen",
+  "manualUrl": "https://github.com/wiqid/repelzen/blob/master/README.md",
+  "sourceUrl": "https://github.com/wiqid/repelzen",
+  "donateUrl": "https://paypal.me/wiqid",
+  "modules": [
+    {
+      "slug": "reburst",
+      "name": "reburst",
+      "description": "burst generator",
+      "tags": [
+        "clock modulator",
+        "random"
+      ]
+    },
+    {
+      "slug": "refold",
+      "name": "refold",
+      "description": "wavefolder",
+      "tags": [
+        "waveshaper"
+      ]
+    }
+  ]
+}

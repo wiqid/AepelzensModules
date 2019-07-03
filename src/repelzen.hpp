@@ -1,8 +1,7 @@
-#include "rack.hpp"
+#include <rack.hpp>
 
 using namespace rack;
-
-extern Plugin *plugin;
+extern Plugin *pluginInstance;
 
 /* the original modulo does not deal with negative numbers correctly
    For example -1%12 should be 11, but it is -1*/
@@ -15,65 +14,152 @@ inline int ceilN(float x) {
     return (x < 0) ? (int)floor(x) : (int)ceil(x);
 }
 
-struct Knob29 : RoundKnob {
-	Knob29() {
-		setSVG(SVG::load(assetPlugin(plugin, "res/knob_29px.svg")));
-		box.size = Vec(29, 29);
+/* custom components for repelzen redesign */
+
+struct ReButtonL : app::SvgSwitch {
+	ReButtonL() {
+		momentary = true;
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/button_l.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/button_l_push.svg")));
 	}
 };
 
-struct CKSSThreeH : SVGSwitch, ToggleSwitch {
-	CKSSThreeH() {
-	    addFrame(SVG::load(assetPlugin(plugin, "res/ComponentLibrary/CKSSThreeH_0.svg")));
-	    addFrame(SVG::load(assetPlugin(plugin, "res/ComponentLibrary/CKSSThreeH_1.svg")));
-	    addFrame(SVG::load(assetPlugin(plugin, "res/ComponentLibrary/CKSSThreeH_2.svg")));
+struct ReButtonM : app::SvgSwitch {
+	ReButtonM() {
+		momentary = true;
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/button_m.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/button_m_push.svg")));
 	}
 };
 
-struct SnapTrimpot : Trimpot {
-    SnapTrimpot() {
-	snap = true;
-	smooth = false;
+struct ReIOPort : app::SvgPort {
+    ReIOPort() {
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/jack.svg")));
     }
 };
 
-struct BefacoWhiteKnob : SVGKnob {
-	BefacoWhiteKnob() {
-		minAngle = -0.75*M_PI;
-		maxAngle = 0.75*M_PI;
-		setSVG(SVG::load(assetPlugin(plugin, "res/ComponentLibrary/BefacoWhiteKnob.svg")));
-	}
+struct ReKnobLGrey : app::SvgKnob {
+    ReKnobLGrey() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_l_grey.svg")));
+    }
 };
 
-struct BefacoRedKnob : SVGKnob {
-	BefacoRedKnob() {
-		minAngle = -0.75*M_PI;
-		maxAngle = 0.75*M_PI;
-		setSVG(SVG::load(assetPlugin(plugin, "res/ComponentLibrary/BefacoRedKnob.svg")));
-	}
+struct ReKnobMBlue : app::SvgKnob {
+    ReKnobMBlue() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_m_blue.svg")));
+    }
 };
 
-struct BefacoDarkKnob : SVGKnob {
-	BefacoDarkKnob() {
-		minAngle = -0.75*M_PI;
-		maxAngle = 0.75*M_PI;
-		setSVG(SVG::load(assetPlugin(plugin,"res/ComponentLibrary/BefacoDarkKnob.svg")));
-	}
+struct ReKnobMGreen : app::SvgKnob {
+    ReKnobMGreen() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_m_green.svg")));
+    }
 };
 
-template <typename BASE>
-struct BigLight : BASE {
-	BigLight() {
-	    this->box.size = Vec(17, 17);
-	}
+struct ReKnobMGrey : app::SvgKnob {
+    ReKnobMGrey() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_m_grey.svg")));
+    }
 };
 
-extern Model *modelQuadSeq;
+struct ReKnobMRed : app::SvgKnob {
+    ReKnobMRed() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_m_red.svg")));
+    }
+};
+
+struct ReKnobMYellow : app::SvgKnob {
+    ReKnobMYellow() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_m_yellow.svg")));
+    }
+};
+
+struct ReKnobSBlue : app::SvgKnob {
+    ReKnobSBlue() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_s_blue.svg")));
+    }
+};
+
+struct ReKnobSGreen : app::SvgKnob {
+    ReKnobSGreen() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_s_green.svg")));
+    }
+};
+
+struct ReKnobSGrey : app::SvgKnob {
+    ReKnobSGrey() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_s_grey.svg")));
+    }
+};
+
+struct ReKnobSRed : app::SvgKnob {
+    ReKnobSRed() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_s_red.svg")));
+    }
+};
+
+struct ReKnobSYellow : app::SvgKnob {
+    ReKnobSYellow() {
+        minAngle = -0.83 * M_PI;
+        maxAngle = 0.83 * M_PI;
+        setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/knob_s_yellow.svg")));
+    }
+};
+
+struct ReSnapKnobBlue : ReKnobMBlue {
+    ReSnapKnobBlue() {
+        snap = true;
+    }
+};
+
+struct ReSnapKnobGreen : ReKnobMGreen {
+    ReSnapKnobGreen() {
+        snap = true;
+    }
+};
+
+struct ReSwitch2 : app::SvgSwitch {
+    ReSwitch2() {
+        addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/switch2_1.svg")));
+        addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/switch2_2.svg")));
+    }
+};
+
+struct ReSwitch3 : app::SvgSwitch {
+    ReSwitch3() {
+        addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/switch3_1.svg")));
+        addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/switch3_2.svg")));
+        addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/switch3_3.svg")));
+    }
+};
+
+
+/* extern Model *modelQuadSeq;
 extern Model *modelGateSeq;
-extern Model *modelDice;
+extern Model *modelDice; */
 extern Model *modelBurst;
 extern Model *modelFolder;
-extern Model *modelWalker;
+/* extern Model *modelWalker;
 extern Model *modelErwin;
 extern Model *modelWerner;
-extern Model *modelMixer;
+extern Model *modelMixer; */

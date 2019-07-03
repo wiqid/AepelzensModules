@@ -1,7 +1,7 @@
 # VCV Rack plugins
 
-**This will be a re-release of Aepelzen's modules with a redesign. We plan on
-getting this into the VCV Rack Plugin Manager.**
+**This is a re-release in progress of Aepelzen's modules with a redesign by Pyer
+and ported to Rack version 1. We plan on getting this into the VCV Rack Plugin Manager.**
 
 <!--
 ![screenshot](https://github.com/Aepelzen/AepelzensModules/blob/master/images/screenshot.png)
@@ -9,32 +9,50 @@ getting this into the VCV Rack Plugin Manager.**
 
 ## HexMix
 
-You are probably wondering if we really need another mixer. There are
-already various options to choose from and some of them are quite
-nice but for some reason nobody includes equalizers (at least none
-that i know of). So here is one that does. It is inspired by Befacos
-Hexmix. I took some freedom with the layout and made the whole thing
-more compact though. The equalizers are also modelled after the
-Hexmix. You can see the Frequency-Response of the channel-EQs in the
-graphic below. As you can see, they provide a pretty serious boost
-(±12dB at 100, 1k and 10k Hz), so watch your levels, I'm not clipping
-the output. The Master-EQ is nearly identical but softer (only ±6 db).
+You are probably wondering if we really need another mixer. There are already
+various options to choose from and some of them are quite nice but for some
+reason nobody includes equalizers. So here is one that does.  It is inspired by
+Befacos Hexmix. I took some freedom with the layout and made the whole thing
+more compact though. The equalizers are also modelled after the Hexmix. You can
+see the Frequency-Response of the channel-EQs in the graphic below. As you can
+see, they provide a pretty serious boost (±12dB at 100, 1k and 10k Hz), so watch
+your levels, I'm not clipping the output. The Master-EQ is nearly identical but
+softer (only ±6 db).
 
 ![channelEQs](https://github.com/wiqid/repelzen/blob/master/images/hexmixFreqResponse.png)
 
 ## GateSeq
 
-A Gate Sequencer with pattern support intended for polyrhythms. Every channel has it's own clock input and length. There is also a global clock input and an internal clock. Furthermore each channel has a probability setting that sets the probability that an active beat will be sent out.
+A Gate Sequencer with pattern support intended for polyrhythms. Every channel
+has it's own clock input and length. There is also a global clock input and an
+internal clock. Furthermore each channel has a probability setting that sets the
+probability that an active beat will be sent out.
 
-To set the length for a channel hit the length button. It will turn red to indicate that you are now in length-mode. In this mode every channel has a red step button (or a yellow one if that step is also active) which indicates the last step in the sequence. Just press another step to change the length. To leave length-mode push the length button again. The length settings are tied to the pattern and will get copied if you copy a pattern.
+To set the length for a channel hit the length button. It will turn red to
+indicate that you are now in length-mode. In this mode every channel has a red
+step button (or a yellow one if that step is also active) which indicates the
+last step in the sequence. Just press another step to change the length. To
+leave length-mode push the length button again. The length settings are tied to
+the pattern and will get copied if you copy a pattern.
 
-To copy a pattern, select the pattern you want to copy first. Push the copy button to enable copy-mode, switch to the target pattern and hit the copy button again to paste your pattern. This will overwrite the target pattern.
+To copy a pattern, select the pattern you want to copy first. Push the copy
+button to enable copy-mode, switch to the target pattern and hit the copy button
+again to paste your pattern. This will overwrite the target pattern.
 
-The switch over the pattern input determines wheater all channel positions should be reset when switching patterns (i. e. start the pattern from the beginning). This might be useful to realign the channels when switching from a pattern that uses different lengths per channel. When inactive the pattern will just keep running.
+The switch over the pattern input determines wheater all channel positions
+should be reset when switching patterns (i. e. start the pattern from the
+beginning). This might be useful to realign the channels when switching from a
+pattern that uses different lengths per channel. When inactive the pattern will
+just keep running.
 
 ### Pattern Merging
 
-You can create new patterns out of existing ones by merging them. The workflow is similar to copying. Select the base-pattern first and push the merge button. Now select another pattern and this new pattern will get merged with the base-pattern according to the merge-mode (selected with the knob below the merge button). The base pattern defines the channel lengths (this might change in future versions). Currently the following merge modes are available:
+You can create new patterns out of existing ones by merging them. The workflow
+is similar to copying. Select the base-pattern first and push the merge button.
+Now select another pattern and this new pattern will get merged with the
+base-pattern according to the merge-mode (selected with the knob below the merge
+button). The base pattern defines the channel lengths (this might change in
+future versions). Currently the following merge modes are available:
 * OR
 * AND
 * XOR
@@ -82,8 +100,11 @@ triggers and the time between them. Acceleration shortens the time between
 subsequent triggers, while jitter shifts them randomly. The switch at the
 bottom controls the output mode (trigger or gate).
 
-The last trigger also triggers the EOC (end of cycle) output. You can connect this to the trigger input and turn up jitter and/or acceleration to get an irregular clock or chain multiple burst generators together.
-The mode button selects the mode for the CV output, that can be used to modulate pitch or filter cutoff for delay style effects etc. Currently the following modes are supported:
+The last trigger also triggers the EOC (end of cycle) output. You can connect
+this to the trigger input and turn up jitter and/or acceleration to get an
+irregular clock or chain multiple burst generators together. The mode button
+selects the mode for the CV output, that can be used to modulate pitch or filter
+cutoff for delay style effects etc. Currently the following modes are supported:
 * Up: cv increases in even steps
 * Down: cv decreases in even steps
 * Alternating1: output alternates between positive and negative values. The magnitude is only increased after 2 pulses (so you get 0, 1, -1, 2, -2 ...)
@@ -96,19 +117,36 @@ The mode button selects the mode for the CV output, that can be used to modulate
 
 ## Manifold
 
-A wavefolder. Works best with simple input signals like sine or triangle waves. The fold and symmetry inputs work well with CV and audio signals. The output becomes pretty noisy for high frequency modulators but produces very interesting sounds at low/mid frequency ranges. There is an alternative folding algorithm that can be switched via context menu. That one does all the folding in a single pass and therefore the stages switch does nothing if this mode is selected. It also responds differently to the symmetry parameter, especially with a high number of folds.
+A wavefolder. Works best with simple input signals like sine or triangle waves.
+The fold and symmetry inputs work well with CV and audio signals. The output
+becomes pretty noisy for high frequency modulators but produces very interesting
+sounds at low/mid frequency ranges. There is an alternative folding algorithm
+that can be switched via context menu. That one does all the folding in a single
+pass and therefore the stages switch does nothing if this mode is selected. It
+also responds differently to the symmetry parameter, especially with a high
+number of folds.
 
 Note: this module shifts the phase of the input-signal (because of the upsampling)
 
 ## Walker
 
-A CV generator that simulates a random walk. At every step the CV output changes by either plus or minus stepsize. The decision is affected by the Symmetry parameter. At 12 o'clock both directions are equally likely, fully ccw all steps move downward, full cw all steps move upward. The Switch controls the behaviour at the range boundaries. There are 3 possible modes:
+A CV generator that simulates a random walk. At every step the CV output changes
+by either plus or minus stepsize. The decision is affected by the Symmetry
+parameter. At 12 o'clock both directions are equally likely, fully ccw all steps
+move downward, full cw all steps move upward. The Switch controls the behaviour
+at the range boundaries. There are 3 possible modes:
 * Clip the signal at the boundary and just wait for it to eventually get back into the allowed range (depending on the symmetry parameter this might not happen or take a long time)
 * Reset to zero
 * Reset to random value within ± range/2 (this is also affected by the Symmetry parameter)
 
 ## Erwin
 
-A 4-channel scale-quantiser with up to 16 user-definable scales. All inputs/outputs use the same scale, however you can transpose every channel seperately by ±4 octaves (the 4 small trimpots). You can also transpose all outputs by 4 octaves and/or 12 semitonses via CV inputs.
+A 4-channel scale-quantiser with up to 16 user-definable scales. All
+inputs/outputs use the same scale, however you can transpose every channel
+seperately by ±4 octaves (the 4 small trimpots). You can also transpose all
+outputs by 4 octaves and/or 12 semitonses via CV inputs.
 
-Scales can be loaded and saved via the right-click-menu (they are also saved with the patch). The menu also allows to change the Quantizer mode. (Down used to be the only mode in older version and is still the default for backwards compatibility)
+Scales can be loaded and saved via the right-click-menu (they are also saved
+with the patch). The menu also allows to change the Quantizer mode. (Down used
+to be the only mode in older version and is still the default for backwards
+compatibility)
