@@ -30,7 +30,7 @@ struct Folder : Module {
 
     Folder() {
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-        configParam(Folder::STAGE_PARAM, 1, 3, 2, "folding stages");
+        configParam(Folder::STAGE_PARAM, 1, 3, 2, "folding stages", "", 0, 2, 0);
         configParam(Folder::GAIN_PARAM, 0.0, 14.0, 1.0, "folding amount");
         configParam(Folder::GAIN_ATT_PARAM, -1.0, 1.0, 0, "folding amount modulation");
         configParam(Folder::SYM_PARAM, -1.0, 1.0, 0.0, "symmetry");

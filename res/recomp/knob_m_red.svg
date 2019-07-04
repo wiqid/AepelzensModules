@@ -1,16 +1,15 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="29" height="29" viewBox="0 0 29 29">
-  <defs>
-    <pattern id="New_Pattern_Swatch_1" data-name="New Pattern Swatch 1" width="24.63887" height="26.06439" patternTransform="translate(-7.57246 21.85974)" patternUnits="userSpaceOnUse" viewBox="0 0 24.639 26.064">
-      <rect width="24.63887" height="26.06439" style="fill: none"/>
-      <rect width="24.63887" height="26.06439" style="fill: #cc4c4c"/>
-    </pattern>
-  </defs>
-  <title>knob_m_red</title>
-  <circle cx="14.5" cy="14.5" r="14.5" style="fill: #1c1c1c"/>
-  <circle cx="14.5" cy="14.5" r="13.46429" style="fill: #5b5b5b"/>
-  <circle cx="14.5" cy="14.5" r="10.61607" style="fill: #494949"/>
-  <rect x="11.39286" width="6.21429" height="5.17857" style="fill: #494949"/>
-  <rect x="12.42857" width="4.14286" height="5.17857" style="fill: url(#New_Pattern_Swatch_1)"/>
-  <rect x="12.42857" width="4.14286" height="6.99107" style="fill: #4f4f4f;opacity: 0.25"/>
-  <circle cx="14.5" cy="14.5" r="9.58036" style="fill: url(#New_Pattern_Swatch_1)"/>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="29px" height="29px" viewBox="0 0 29 29" enable-background="new 0 0 29 29" xml:space="preserve">
+<title>knob_m_blue</title>
+<g>
+	<circle fill="#1C1C1C" cx="14.5" cy="14.5" r="14.5"/>
+	<circle fill="#5B5B5B" cx="14.5" cy="14.5" r="13.46429"/>
+	<circle fill="#494949" cx="14.5" cy="14.5" r="11.39286"/>
+	<rect x="11.39286" fill="#494949" width="6.21429" height="5.17857"/>
+	<rect x="12.42857" fill="#CC4C4C" width="4.14286" height="5.17857"/>
+	<rect x="12.42857" opacity="0.25" fill="#4F4F4F" enable-background="new    " width="4.14286" height="5.17857"/>
+	<circle fill="#CC4C4C" cx="14.5" cy="14.5" r="10.35714"/>
+</g>
 </svg>

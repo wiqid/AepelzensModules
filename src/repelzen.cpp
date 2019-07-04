@@ -12,7 +12,7 @@ void init(rack::Plugin *p) {
 	p->addModel(modelBurst);
 	p->addModel(modelFolder);
 /*	p->addModel(modelWalker);
-	p->addModel(modelErwin);
+	p->addModel(modelErwin); */
 	p->addModel(modelWerner);
-	p->addModel(modelMixer); */
+	p->addModel(modelMixer);
 }

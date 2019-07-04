@@ -153,6 +153,11 @@ struct ReSwitch3 : app::SvgSwitch {
     }
 };
 
+// struct ReRedLight : app::GrayModuleLightWidget {
+//     ReRedLight() {
+//         addBaseColor(nvgRGB(0xff, 0x25, 0x4a));
+//     }
+// };
 
 /* extern Model *modelQuadSeq;
 extern Model *modelGateSeq;
@@ -160,6 +165,6 @@ extern Model *modelDice; */
 extern Model *modelBurst;
 extern Model *modelFolder;
 /* extern Model *modelWalker;
-extern Model *modelErwin;
+extern Model *modelErwin; */
 extern Model *modelWerner;
-extern Model *modelMixer; */
+extern Model *modelMixer;

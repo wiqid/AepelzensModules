@@ -1,7 +1,11 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42">
-  <title>button_l</title>
-  <g>
-    <circle cx="21.0002" cy="20.99998" r="20" style="fill: #5b5b5b"/>
-    <path d="M21,2A19,19,0,1,1,2,21,19.02151,19.02151,0,0,1,21,2m0-2A21,21,0,1,0,42,21,21,21,0,0,0,21,0Z" transform="translate(0 0)" style="fill: #1c1c1c"/>
-  </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="42px" height="42px" viewBox="0 0 42 42" enable-background="new 0 0 42 42" xml:space="preserve">
+<title>button_l</title>
+<g>
+	<circle fill="#5B5B5B" cx="21.0002" cy="20.99998" r="20"/>
+	<path fill="#1C1C1C" d="M21,2c10.49341,0,19,8.50659,19,19s-8.50659,19-19,19S2,31.49341,2,21
+		C2.01185,10.5115,10.5115,2.01185,21,2 M21,0C9.40202,0,0,9.40202,0,21s9.40202,21,21,21s21-9.40202,21-21S32.59798,0,21,0z"/>
+</g>
 </svg>
