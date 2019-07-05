@@ -3,11 +3,9 @@
 **This is a re-release in progress of Aepelzen's modules with a redesign by Pyer
 and ported to Rack version 1. We plan on getting this into the VCV Rack Plugin Manager.**
 
-<!--
-![screenshot](https://github.com/Aepelzen/AepelzensModules/blob/master/images/screenshot.png)
--->
+![logo](https://github.com/wiqid/repelzen/blob/master/images/animated-logo.gif)
 
-## HexMix
+## rexmix
 
 You are probably wondering if we really need another mixer. There are already
 various options to choose from and some of them are quite nice but for some
@@ -39,8 +37,8 @@ To copy a pattern, select the pattern you want to copy first. Push the copy
 button to enable copy-mode, switch to the target pattern and hit the copy button
 again to paste your pattern. This will overwrite the target pattern.
 
-The switch over the pattern input determines wheater all channel positions
-should be reset when switching patterns (i. e. start the pattern from the
+The switch over the pattern input determines whether all channel positions
+should be reset when switching patterns (i.e. start the pattern from the
 beginning). This might be useful to realign the channels when switching from a
 pattern that uses different lengths per channel. When inactive the pattern will
 just keep running.
@@ -66,7 +64,7 @@ A four channel sequencer. Like GateSeq each channel has it's own clock input
 input (under the Run button). The mode parameter sets one of the following
 playback modes:
 * Forward
-* Backwad
+* Backward
 * Alternating
 * Random Neighbour
 * Random
@@ -86,13 +84,13 @@ or you hit a manual step select button.
 
 Another sequencer. This one is built around probabilities and comes with all
 the usual goodies (per channel clock, length and playback modes). All
-unconnected clock inputs are normalised to the first clock input. The knobs
+unconnected clock inputs are normalized to the first clock input. The knobs
 set the probability for a step to be active. Unfortunately there is not enough
 space for labels but this should be simple enough to work without. The upper
 knob sets the channel length, the lower one the playback mode (these work like
 in QuadSeq). The button in the upper left corner resets the playback positions.
 
-## Burst
+## reburst
 
 A Burst generator. For every received trigger a number of triggers and an
 accompanying CV signal is sent out. Repetitions and time set the number of
@@ -115,7 +113,7 @@ cutoff for delay style effects etc. Currently the following modes are supported:
 * Random
 
 
-## Manifold
+## refold
 
 A wavefolder. Works best with simple input signals like sine or triangle waves.
 The fold and symmetry inputs work well with CV and audio signals. The output
@@ -128,7 +126,7 @@ number of folds.
 
 Note: this module shifts the phase of the input-signal (because of the upsampling)
 
-## Walker
+## rewalk
 
 A CV generator that simulates a random walk. At every step the CV output changes
 by either plus or minus stepsize. The decision is affected by the Symmetry
@@ -139,12 +137,12 @@ at the range boundaries. There are 3 possible modes:
 * Reset to zero
 * Reset to random value within ± range/2 (this is also affected by the Symmetry parameter)
 
-## Erwin
+## rewin
 
-A 4-channel scale-quantiser with up to 16 user-definable scales. All
+A 4-channel scale-quantizer with up to 16 user-definable scales. All
 inputs/outputs use the same scale, however you can transpose every channel
-seperately by ±4 octaves (the 4 small trimpots). You can also transpose all
-outputs by 4 octaves and/or 12 semitonses via CV inputs.
+separately by ±4 octaves (the 4 small trimpots). You can also transpose all
+outputs by 4 octaves and/or 12 semitones via CV inputs.
 
 Scales can be loaded and saved via the right-click-menu (they are also saved
 with the patch). The menu also allows to change the Quantizer mode. (Down used
