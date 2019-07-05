@@ -38,6 +38,7 @@ struct ReIOPort : app::SvgPort {
     }
 };
 
+/* knobs */
 struct ReKnobLGrey : app::SvgKnob {
     ReKnobLGrey() {
         minAngle = -0.83 * M_PI;
@@ -126,6 +127,13 @@ struct ReKnobSYellow : app::SvgKnob {
     }
 };
 
+/* snap knobs */
+struct ReSnapKnobLGrey : ReKnobLGrey {
+    ReSnapKnobLGrey() {
+        snap = true;
+    }
+};
+
 struct ReSnapKnobBlue : ReKnobMBlue {
     ReSnapKnobBlue() {
         snap = true;
@@ -138,6 +146,31 @@ struct ReSnapKnobGreen : ReKnobMGreen {
     }
 };
 
+struct ReSnapKnobSBlue : ReKnobSBlue {
+    ReSnapKnobSBlue() {
+        snap = true;
+    }
+};
+
+struct ReSnapKnobSGreen : ReKnobSGreen {
+    ReSnapKnobSGreen() {
+        snap = true;
+    }
+};
+
+struct ReSnapKnobSRed : ReKnobSRed {
+    ReSnapKnobSRed() {
+        snap = true;
+    }
+};
+
+struct ReSnapKnobSYellow : ReKnobSYellow {
+    ReSnapKnobSYellow() {
+        snap = true;
+    }
+};
+
+/* switches */
 struct ReSwitch2 : app::SvgSwitch {
     ReSwitch2() {
         addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/recomp/switch2_1.svg")));
@@ -153,18 +186,39 @@ struct ReSwitch3 : app::SvgSwitch {
     }
 };
 
-// struct ReRedLight : app::GrayModuleLightWidget {
-//     ReRedLight() {
-//         addBaseColor(nvgRGB(0xff, 0x25, 0x4a));
-//     }
-// };
+/* lights */
+template <typename BASE>
+struct ReLightM : BASE { // to go with ReButtonM as bezel
+    ReLightM() {
+        this->box.size = (Vec(17, 17));
+    }
+};
 
-/* extern Model *modelQuadSeq;
-extern Model *modelGateSeq;
-extern Model *modelDice; */
+struct ReRedLight : app::ModuleLightWidget {
+    ReRedLight() {
+        bgColor = nvgRGB(0x5a, 0x5a, 0x5a);
+        borderColor = nvgRGBA(0, 0, 0, 0x60);
+        addBaseColor(nvgRGB(0xff, 0x25, 0x4a));
+    }
+};
+
+struct ReBlueLight : app::ModuleLightWidget {
+    ReBlueLight() {
+        bgColor = nvgRGB(0x5a, 0x5a, 0x5a);
+        borderColor = nvgRGBA(0, 0, 0, 0x60);
+        addBaseColor(nvgRGB(0x25, 0xc0, 0xff));
+    }
+};
+
+
+
+
+// extern Model *modelQuadSeq;
+// extern Model *modelGateSeq;
+// extern Model *modelDice;
+// extern Model *modelWalker;
 extern Model *modelBurst;
 extern Model *modelFolder;
-/* extern Model *modelWalker;
-extern Model *modelErwin; */
+extern Model *modelErwin;
 extern Model *modelWerner;
 extern Model *modelMixer;

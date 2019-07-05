@@ -237,20 +237,20 @@ struct MixerWidget : ModuleWidget {
             addInput(createInput<ReIOPort>(Vec(64.3, 199.75 + i * 25), module, Mixer::CH1_PAN_INPUT + i));
         }
         for(int i=0;i<3;i++) { // leds to the left
-            addChild(createLight<SmallLight<RedLight>>(Vec(104 + i * 42, 30), module, Mixer::MUTE_LIGHT + i));
+            addChild(createLight<SmallLight<ReRedLight>>(Vec(104 + i * 42, 30), module, Mixer::MUTE_LIGHT + i));
         }
         for(int i=3;i<6;i++) { // leds to the right
-            addChild(createLight<SmallLight<RedLight>>(Vec(135 + i * 42, 30), module, Mixer::MUTE_LIGHT + i));
+            addChild(createLight<SmallLight<ReRedLight>>(Vec(135 + i * 42, 30), module, Mixer::MUTE_LIGHT + i));
         }
 
         addParam(createParam<ReKnobLGrey>(Vec(361.5, 294), module, Mixer::MASTER_GAIN_PARAM));
         addParam(createParam<ReKnobMGrey>(Vec(368, 151), module, Mixer::MASTER_EQ_HIGH_PARAM));
         addParam(createParam<ReKnobMGrey>(Vec(368, 193), module, Mixer::MASTER_EQ_MID_PARAM));
         addParam(createParam<ReKnobMGrey>(Vec(368, 235), module, Mixer::MASTER_EQ_LOW_PARAM));
-        //meter
+        // meter
         for(int i=0;i<6;i++) {
-            addChild(createLight<SmallLight<RedLight>>(Vec(364, 33 + i * 9), module, Mixer::METER_L_LIGHT + i));
-            addChild(createLight<SmallLight<RedLight>>(Vec(394, 33 + i * 9), module, Mixer::METER_R_LIGHT + i));
+            addChild(createLight<SmallLight<ReRedLight>>(Vec(364, 33 + i * 9), module, Mixer::METER_L_LIGHT + i));
+            addChild(createLight<SmallLight<ReRedLight>>(Vec(394, 33 + i * 9), module, Mixer::METER_R_LIGHT + i));
         }
 
         addOutput(createOutput<ReIOPort>(Vec(356, 108.75), module, Mixer::L_OUTPUT));
