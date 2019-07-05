@@ -163,8 +163,7 @@ struct FolderWidget : ModuleWidget {
         Folder *module = dynamic_cast<Folder*>(this->module);
         assert(module);
 
-        MenuLabel *spacerLabel = new MenuLabel();
-        menu->addChild(spacerLabel);
+        menu->addChild(new MenuSeparator());
 
         FolderMenuItem *altItem = createMenuItem<FolderMenuItem>(
             "Alternative folding algorithm", CHECKMARK(module->alternativeMode)
