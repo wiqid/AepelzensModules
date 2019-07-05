@@ -3,7 +3,7 @@
 **This is a re-release in progress of Aepelzen's modules with a redesign by Pyer
 and ported to Rack version 1. We plan on getting this into the VCV Rack Plugin Manager.**
 
-![logo](https://github.com/wiqid/repelzen/blob/master/images/animated-logo.gif)
+![logo](https://github.com/wiqid/repelzen/blob/v1/images/animated-logo.gif)
 
 ## rexmix
 
