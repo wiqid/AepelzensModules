@@ -113,9 +113,9 @@ void Erwin::process(const ProcessArgs &args) {
 
     for(unsigned int y=0; y<NUM_CHANNELS; y++) {
         // normalize to first channel
-        // if(!inputs[IN_INPUT + y].isConnected()) {
-        //     inputs[IN_INPUT + y].getVoltage() = inputs[IN_INPUT].getVoltage();
-        // }
+        if(!inputs[IN_INPUT + y].isConnected()) {
+            inputs[IN_INPUT + y].setVoltage(inputs[IN_INPUT].getVoltage(), 0);
+        }
 
         octave = trunc(inputs[IN_INPUT+y].getVoltage());
         freq = inputs[IN_INPUT+y].getVoltage() - octave;
