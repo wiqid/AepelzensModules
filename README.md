@@ -18,7 +18,7 @@ your levels, I'm not clipping the output. The Master-EQ is nearly identical but
 softer (only ±6 db).
 
 ![channelEQs](https://github.com/wiqid/repelzen/blob/master/images/hexmixFreqResponse.png)
-
+<!--
 ## GateSeq
 
 A Gate Sequencer with pattern support intended for polyrhythms. Every channel
@@ -89,6 +89,7 @@ set the probability for a step to be active. Unfortunately there is not enough
 space for labels but this should be simple enough to work without. The upper
 knob sets the channel length, the lower one the playback mode (these work like
 in QuadSeq). The button in the upper left corner resets the playback positions.
+-->
 
 ## reburst
 
@@ -126,6 +127,7 @@ number of folds.
 
 Note: this module shifts the phase of the input-signal (because of the upsampling)
 
+<!--
 ## rewalk
 
 A CV generator that simulates a random walk. At every step the CV output changes
@@ -136,7 +138,7 @@ at the range boundaries. There are 3 possible modes:
 * Clip the signal at the boundary and just wait for it to eventually get back into the allowed range (depending on the symmetry parameter this might not happen or take a long time)
 * Reset to zero
 * Reset to random value within ± range/2 (this is also affected by the Symmetry parameter)
-
+-->
 ## rewin
 
 A 4-channel scale-quantizer with up to 16 user-definable scales. All
@@ -148,3 +150,7 @@ Scales can be loaded and saved via the right-click-menu (they are also saved
 with the patch). The menu also allows to change the Quantizer mode. (Down used
 to be the only mode in older version and is still the default for backwards
 compatibility)
+
+## retrig
+
+A CV to Trigger utility.
