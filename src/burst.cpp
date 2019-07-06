@@ -1,5 +1,4 @@
 #include "repelzen.hpp"
-#include "dsp/digital.hpp"
 #include <math.h>
 
 #define MAX_REPS 8
@@ -64,43 +63,54 @@ struct Burst : Module
   float randomcv = 0;
   float cvOut = 0;
 
-  SchmittTrigger m_buttonTrigger;
-  SchmittTrigger gateTrigger;;
-  SchmittTrigger clockTrigger;
+  dsp::SchmittTrigger m_buttonTrigger;
+  dsp::SchmittTrigger gateTrigger;;
+  dsp::SchmittTrigger clockTrigger;
 
-  PulseGenerator outPulse;
-  PulseGenerator eocPulse;
+  dsp::PulseGenerator outPulse;
+  dsp::PulseGenerator eocPulse;
 
   //toggle for every received clock tick
   float clockTimer = 0;
   float lastClockTime = 0;
   float gateOutLength = 0.01;
 
-  void step() override;
+  void process(const ProcessArgs &args) override;
 
-  Burst() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) { }
+  Burst() {
+	config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+	configParam(Burst::BUTTON_PARAM, 0.0, 1.0, 0.0, "manual burst");
+	configParam(Burst::REP_PARAM, 0, 8, 4, "repetitions");
+	configParam(Burst::TIME_PARAM, 0.02, 1, 0.508, "time");
+	configParam(Burst::ACCEL_PARAM, 1.0, 2.0, 1.0, "acceleration");
+	configParam(Burst::JITTER_PARAM, 0.0, 1.0, 0.0, "jitter");
+	configParam(Burst::CV_MODE_PARAM, 0, 7, 0, "cv mode");
+	configParam(Burst::REP_ATT_PARAM, -1.0, 1.0, 0.0, "repetition modulation");
+	configParam(Burst::TIME_ATT_PARAM, -1.0, 1.0, 0.0, "time modulation");
+	configParam(Burst::GATE_MODE_PARAM, 0.0, 1.0, 0.0, "gate/trigger switch");
+  }
 };
 
-void Burst::step()
+void Burst::process(const ProcessArgs &args)
 {
-  float delta = engineGetSampleTime();
-  float schmittValue = gateTrigger.process(inputs[GATE_INPUT].value);
+  float delta = args.sampleTime;
+  float schmittValue = gateTrigger.process(inputs[GATE_INPUT].getVoltage());
 
-  //seconds = params[TIME_PARAM].value + (inputs[TIME_INPUT].value / 20.0);
-  float accel = params[ACCEL_PARAM].value;
-  float jitter = params[JITTER_PARAM].value;
+  //seconds = params[TIME_PARAM].getValue() + (inputs[TIME_INPUT].getVoltage() / 20.0);
+  float accel = params[ACCEL_PARAM].getValue();
+  float jitter = params[JITTER_PARAM].getValue();
   float randomDelta = 0;
 
-  timeParam = clamp(params[TIME_PARAM].value + (params[TIME_ATT_PARAM].value * inputs[TIME_INPUT].value / 10.0 * MAX_TIME), 0.0f, MAX_TIME);
-  pulseParam = clamp((int)params[REP_PARAM].value + (inputs[REP_INPUT].value * params[REP_ATT_PARAM].value /10.0 * MAX_REPS), 0, MAX_REPS);
+  timeParam = clamp(params[TIME_PARAM].getValue() + (params[TIME_ATT_PARAM].getValue() * inputs[TIME_INPUT].getVoltage() / 10.0 * MAX_TIME), 0.0f, MAX_TIME);
+  pulseParam = clamp((int)params[REP_PARAM].getValue() + (inputs[REP_INPUT].getVoltage() * params[REP_ATT_PARAM].getValue() /10.0 * MAX_REPS), 0, MAX_REPS);
 
   //exponential scaling for timeparam
   timeParam = (exp(timeParam) - 1)/(euler - 1);
 
-  if (inputs[CLOCK_INPUT].active) {
+  if (inputs[CLOCK_INPUT].isConnected()) {
     clockTimer += delta;
-    if( clockTrigger.process(inputs[CLOCK_INPUT].value) ) {
-      timeParam = params[TIME_PARAM].value;
+    if( clockTrigger.process(inputs[CLOCK_INPUT].getVoltage()) ) {
+      timeParam = params[TIME_PARAM].getValue();
       int mult = (int)(timeParam*8 - 4);
       //smooth clock (over 8 pulses) to reduce sensitivity
       // float clockDelta = clockTimer - lastClockTime;
@@ -125,8 +135,8 @@ void Burst::step()
     }
 
     if(jitter > 0) {
-      randomDelta = randomUniform() * jitter * seconds;
-      if (randomUniform() > 0.5) {
+      randomDelta = random::uniform() * jitter * seconds;
+      if (random::uniform() > 0.5) {
 	seconds = seconds + randomDelta;
       }
       else {
@@ -137,13 +147,13 @@ void Burst::step()
     if (pulseCount == pulses) {
       eocPulse.trigger(0.01);
     }
-    gateOutLength = (params[GATE_MODE_PARAM].value) ? 0.01 : seconds/2;
+    gateOutLength = (params[GATE_MODE_PARAM].getValue()) ? 0.01 : seconds/2;
     outPulse.trigger(gateOutLength);
-    randomcv = randomUniform();
+    randomcv = random::uniform();
 
     //cv
     float cvDelta = 5.0/pulses;
-    int mode = roundf(params[CV_MODE_PARAM].value);
+    int mode = roundf(params[CV_MODE_PARAM].getValue());
     switch (mode) {
     case CV_UP:
       cvOut = pulseCount * cvDelta;
@@ -178,7 +188,7 @@ void Burst::step()
     }
   }
 
-  if (schmittValue || m_buttonTrigger.process(params[BUTTON_PARAM].value)) {
+  if (schmittValue || m_buttonTrigger.process(params[BUTTON_PARAM].getValue())) {
     pulseCount = 0;
     timer = 0.0;
     outPulse.trigger(gateOutLength);
@@ -188,53 +198,40 @@ void Burst::step()
   }
 
   timer += delta;
-  outputs[GATE_OUTPUT].value = outPulse.process(delta) ? 10.0 : 0.0;
-  outputs[EOC_OUTPUT].value = eocPulse.process(delta) ? 10.0 : 0.0;
-  outputs[CV_OUTPUT].value = (timer < seconds) ? cvOut : 0.0;
+  outputs[GATE_OUTPUT].setVoltage(outPulse.process(delta) ? 10.0 : 0.0);
+  outputs[EOC_OUTPUT].setVoltage(eocPulse.process(delta) ? 10.0 : 0.0);
+  outputs[CV_OUTPUT].setVoltage((timer < seconds) ? cvOut : 0.0);
 }
 
 
-struct BurstWidget : ModuleWidget
-{
-  BurstWidget(Burst *module);
+struct BurstWidget : ModuleWidget {
+  BurstWidget(Burst *module) {
+    setModule(module);
+    box.size = Vec(8 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
+    setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/reface/reburst_bg.svg")));
+
+    addParam(createParam<ReButtonL>(Vec(39, 40), module, Burst::BUTTON_PARAM));
+    addInput(createInput<ReIOPort>(Vec(48, 110), module, Burst::GATE_INPUT));;
+
+    addParam(createParam<ReKnobMGrey>(Vec(8, 106), module, Burst::ACCEL_PARAM));
+    addParam(createParam<ReKnobMGrey>(Vec(83, 106), module, Burst::JITTER_PARAM));
+    addParam(createParam<ReKnobMYellow>(Vec(8, 161), module, Burst::TIME_PARAM));
+    addParam(createParam<ReSnapKnobBlue>(Vec(83, 161), module, Burst::REP_PARAM));
+
+    addInput(createInput<ReIOPort>(Vec(48, 164), module, Burst::CLOCK_INPUT));;
+
+    addParam(createParam<ReKnobSYellow>(Vec(13, 213), module, Burst::TIME_ATT_PARAM));
+    addInput(createInput<ReIOPort>(Vec(10.5, 256), module, Burst::TIME_INPUT));;
+    addParam(createParam<ReKnobSBlue>(Vec(88, 213), module, Burst::REP_ATT_PARAM));
+    addInput(createInput<ReIOPort>(Vec(85.5, 256), module, Burst::REP_INPUT));;
+
+    addParam(createParam<ReSwitch2>(Vec(53.5, 291), module, Burst::GATE_MODE_PARAM));
+    addParam(createParam<ReSnapKnobGreen>(Vec(45.5, 228), module, Burst::CV_MODE_PARAM));
+
+    addOutput(createOutput<ReIOPort>(Vec(10.5,323), module, Burst::CV_OUTPUT));
+    addOutput(createOutput<ReIOPort>(Vec(48,323), module, Burst::GATE_OUTPUT));
+    addOutput(createOutput<ReIOPort>(Vec(85.5,323), module, Burst::EOC_OUTPUT));
+  }
 };
 
-BurstWidget::BurstWidget(Burst *module) : ModuleWidget(module)
-{
-  box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
-
-  {
-    SVGPanel* panel = new SVGPanel();
-    panel->box.size = box.size;
-    panel->setBackground(SVG::load(assetPlugin(plugin, "res/Burst.svg")));
-    addChild(panel);
-  }
-
-  // addChild(Widget::create<ScrewSilver>(Vec(15, 0)));
-  // addChild(Widget::create<ScrewSilver>(Vec(box.size.x - 30, 0)));
-  // addChild(Widget::create<ScrewSilver>(Vec(15, 365)));
-  // addChild(Widget::create<ScrewSilver>(Vec(box.size.x - 30, 365)));
-
-  //note: SmallKnob size = 28px, Trimpot = 17 px
-  addParam(ParamWidget::create<CKD6>(Vec(30, 105), module, Burst::BUTTON_PARAM, 0.0, 1.0, 0.0));
-  addParam(ParamWidget::create<Davies1900hLargeBlackKnob>(Vec(18, 30), module, Burst::REP_PARAM, 0, 8, 4));
-  addParam(ParamWidget::create<RoundBlackKnob>(Vec(10, 138), module, Burst::TIME_PARAM, 0.02, 1, 0.5));
-  addParam(ParamWidget::create<RoundBlackKnob>(Vec(50, 138), module, Burst::ACCEL_PARAM, 1.0, 2.0, 1.0));
-  addParam(ParamWidget::create<RoundBlackKnob>(Vec(10, 186), module, Burst::JITTER_PARAM, 0.0, 1.0, 0.0));
-  addParam(ParamWidget::create<RoundBlackSnapKnob>(Vec(50, 186), module, Burst::CV_MODE_PARAM, 0, 7, 0));
-
-  addParam(ParamWidget::create<Trimpot>(Vec(15.5, 233), module, Burst::REP_ATT_PARAM, -1.0, 1.0, 0.0));
-  addParam(ParamWidget::create<Trimpot>(Vec(54, 233), module, Burst::TIME_ATT_PARAM, -1.0, 1.0, 0.0));
-  addInput(Port::create<PJ301MPort>(Vec(13, 265), Port::INPUT, module, Burst::REP_INPUT));;
-  addInput(Port::create<PJ301MPort>(Vec(50, 265), Port::INPUT, module, Burst::TIME_INPUT));;
-
-  addInput(Port::create<PJ301MPort>(Vec(5, 305), Port::INPUT, module, Burst::GATE_INPUT));;
-  addInput(Port::create<PJ301MPort>(Vec(60, 305), Port::INPUT, module, Burst::CLOCK_INPUT));;
-  addParam(ParamWidget::create<CKSS>(Vec(38, 300), module, Burst::GATE_MODE_PARAM, 0.0, 1.0, 0.0));
-
-  addOutput(Port::create<PJ301MPort>(Vec(5,335), Port::OUTPUT, module, Burst::CV_OUTPUT));
-  addOutput(Port::create<PJ301MPort>(Vec(32.5,335), Port::OUTPUT, module, Burst::EOC_OUTPUT));
-  addOutput(Port::create<PJ301MPort>(Vec(60,335), Port::OUTPUT, module, Burst::GATE_OUTPUT));
-}
-
-Model *modelBurst = Model::create<Burst, BurstWidget>("repelzen", "burst", "Burst Generator", CLOCK_MODULATOR_TAG, CLOCK_TAG, RANDOM_TAG);
+Model *modelBurst = createModel<Burst, BurstWidget>("reburst");

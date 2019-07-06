@@ -1,6 +1,4 @@
 #include "repelzen.hpp"
-#include "dsp/digital.hpp"
-#include "dsp/samplerate.hpp"
 
 #define BUF_LEN 32
 #define FOLDER_SAMPLE_RATE 192000
@@ -24,36 +22,40 @@ struct Folder : Module {
 	GATE_OUTPUT,
 	NUM_OUTPUTS
     };
-
     enum LightIds {
 	NUM_LIGHTS
     };
 
-    void step() override;
+    void process(const ProcessArgs &args) override;
 
-    Folder() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-	convUp.setRates(engineGetSampleRate(),FOLDER_SAMPLE_RATE);
-	convDown.setRates(FOLDER_SAMPLE_RATE, engineGetSampleRate());
+    Folder() {
+        config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+        configParam(Folder::STAGE_PARAM, 1, 3, 2, "folding stages", "", 0, 2, 0);
+        configParam(Folder::GAIN_PARAM, 0.0, 14.0, 1.0, "folding amount");
+        configParam(Folder::GAIN_ATT_PARAM, -1.0, 1.0, 0, "folding amount modulation");
+        configParam(Folder::SYM_PARAM, -1.0, 1.0, 0.0, "symmetry");
+        configParam(Folder::SYM_ATT_PARAM, -1.0, 1.0, 0.0, "symmetry modulation");
+
+        convUp.setRates(APP->engine->getSampleRate(), FOLDER_SAMPLE_RATE);
+        convDown.setRates(FOLDER_SAMPLE_RATE, APP->engine->getSampleRate());
     }
 
     void onSampleRateChange() override {
-	convUp.setRates(engineGetSampleRate(),FOLDER_SAMPLE_RATE);
-	convDown.setRates(FOLDER_SAMPLE_RATE, engineGetSampleRate());
+        convUp.setRates(APP->engine->getSampleRate(), FOLDER_SAMPLE_RATE);
+        convDown.setRates(FOLDER_SAMPLE_RATE, APP->engine->getSampleRate());
     }
 
-    void randomize() override  {}
-
-    json_t *toJson() override {
-	json_t *rootJ = json_object();
-	json_object_set_new(rootJ, "alternativeMode", json_boolean(alternativeMode));
-	return rootJ;
+    json_t *dataToJson() override {
+        json_t *rootJ = json_object();
+        json_object_set_new(rootJ, "alternativeMode", json_boolean(alternativeMode));
+        return rootJ;
     }
 
-    void fromJson(json_t *rootJ) override {
-	json_t *modeJ = json_object_get(rootJ, "alternativeMode");
-	if(modeJ) {
-	    alternativeMode = json_boolean_value(modeJ);
-	}
+    void dataFromJson(json_t *rootJ) override {
+        json_t *modeJ = json_object_get(rootJ, "alternativeMode");
+        if(modeJ) {
+            alternativeMode = json_boolean_value(modeJ);
+        }
     }
 
     float in, out, gain, sym;
@@ -61,46 +63,46 @@ struct Folder : Module {
 
     bool alternativeMode = false;
 
-    SampleRateConverter<1> convUp;
-    SampleRateConverter<1> convDown;
+    dsp::SampleRateConverter<1> convUp;
+    dsp::SampleRateConverter<1> convDown;
 
     int frame = 0;
     //smallest supported sampleRate in Rack is 44100 (upsample ratio = 4.35)
-    Frame<1> in_buffer[BUF_LEN] = {};
-    Frame<1> out_buffer[5*BUF_LEN] = {};
-    Frame<1> folded_buffer[BUF_LEN] = {};
+    dsp::Frame<1> in_buffer[BUF_LEN] = {};
+    dsp::Frame<1> out_buffer[5*BUF_LEN] = {};
+    dsp::Frame<1> folded_buffer[BUF_LEN] = {};
 
     float fold(float in, float threshold) {
-	float out;
-	if (in>threshold || in<-threshold) {
-	    out = clamp(fabs(fabs(fmod(in - threshold, threshold*4)) - threshold*2) - threshold, -5.0f,5.0f);
-	}
-	else {
-	    out = in;
-	}
-	return out;
+        float out;
+        if (in>threshold || in<-threshold) {
+            out = clamp(fabs(fabs(fmod(in - threshold, threshold*4)) - threshold*2) - threshold, -5.0f,5.0f);
+        }
+        else {
+            out = in;
+        }
+        return out;
     }
 
     float fold3(float in, float t) {
-	float out = 0;
-	if(in>t) {
-	    out = t - (in - t);
-	}
-	else if (in < -t) {
-	    out = -t + (-t - in);
-	}
-	else {
-	    out = in;
-	}
-	return out;
+        float out = 0;
+        if(in>t) {
+            out = t - (in - t);
+        }
+        else if (in < -t) {
+            out = -t + (-t - in);
+        }
+        else {
+            out = in;
+        }
+        return out;
     }
 
 };
 
-void Folder::step() {
-    gain = clamp(params[GAIN_PARAM].value + (inputs[GAIN_INPUT].value * params[GAIN_ATT_PARAM].value), 0.0f,14.0f);
-    sym = clamp(params[SYM_PARAM].value + inputs[SYM_INPUT].value/5.0 * params[SYM_ATT_PARAM].value, -1.0f, 1.0f);
-    in = (inputs[GATE_INPUT].value/5.0 + sym) * gain;
+void Folder::process(const ProcessArgs &args) {
+    gain = clamp(params[GAIN_PARAM].getValue() + (inputs[GAIN_INPUT].getVoltage() * params[GAIN_ATT_PARAM].getValue()), 0.0f,14.0f);
+    sym = clamp(params[SYM_PARAM].getValue() + inputs[SYM_INPUT].getVoltage()/5.0 * params[SYM_ATT_PARAM].getValue(), -1.0f, 1.0f);
+    in = (inputs[GATE_INPUT].getVoltage()/5.0 + sym) * gain;
 
     if(++frame >= BUF_LEN) {
 	//upsampling
@@ -111,7 +113,7 @@ void Folder::step() {
 	//fold
 	for(int i=0;i<outLen;i++) {
 	    if(!alternativeMode) {
-		int stages = (int)(params[STAGE_PARAM].value)*2;
+		int stages = (int)(params[STAGE_PARAM].getValue())*2;
 		for (int y=0;y<stages;y++) {
 		    out_buffer[i].samples[0] = fold3(out_buffer[i].samples[0], threshold);
 		}
@@ -129,57 +131,47 @@ void Folder::step() {
     }
 
     in_buffer[frame].samples[0] = in;
-    outputs[GATE_OUTPUT].value = folded_buffer[frame].samples[0] * 5.0;
+    outputs[GATE_OUTPUT].setVoltage(folded_buffer[frame].samples[0] * 5.0);
 }
-
 
 struct FolderWidget : ModuleWidget {
-    FolderWidget(Folder *module);
-    Menu *createContextMenu() override;
+    FolderWidget(Folder *module){
+        setModule(module);
+        box.size = Vec(4 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/reface/refold_bg.svg")));
+
+        addParam(createParam<ReSwitch3>(Vec(15, 176), module, Folder::STAGE_PARAM));
+        addParam(createParam<ReKnobLGrey>(Vec(9, 40), module, Folder::GAIN_PARAM));
+        addParam(createParam<ReKnobSGrey>(Vec(5.5, 238.5), module, Folder::GAIN_ATT_PARAM));
+        addParam(createParam<ReKnobMBlue>(Vec(15.5, 106), module, Folder::SYM_PARAM));
+        addParam(createParam<ReKnobSBlue>(Vec(35.5, 238.5), module, Folder::SYM_ATT_PARAM));
+
+        addInput(createInput<ReIOPort>(Vec(3.5, 325.5), module, Folder::GATE_INPUT));;
+        addInput(createInput<ReIOPort>(Vec(3.5, 283), module, Folder::GAIN_INPUT));;
+        addInput(createInput<ReIOPort>(Vec(33.5, 283), module, Folder::SYM_INPUT));;
+        addOutput(createOutput<ReIOPort>(Vec(33.5, 325.5), module, Folder::GATE_OUTPUT));
+    }
+
+    struct FolderMenuItem : MenuItem {
+        Folder *module;
+        void onAction(const event::Action &e) override {
+        	module->alternativeMode ^= true;
+        }
+    };
+
+    void appendContextMenu(Menu *menu) override {
+        Folder *module = dynamic_cast<Folder*>(this->module);
+        assert(module);
+
+        menu->addChild(new MenuSeparator());
+
+        FolderMenuItem *altItem = createMenuItem<FolderMenuItem>(
+            "Alternative folding algorithm", CHECKMARK(module->alternativeMode)
+        );
+        altItem->module = module;
+        menu->addChild(altItem);
+    }
+
 };
 
-FolderWidget::FolderWidget(Folder *module) : ModuleWidget(module) {
-    box.size = Vec(4 * 15, RACK_GRID_HEIGHT);
-
-    SVGPanel* panel = new SVGPanel();
-    panel->box.size = box.size;
-    panel->setBackground(SVG::load(assetPlugin(plugin, "res/Folder.svg")));
-    addChild(panel);
-
-    //note: SmallKnob size = 28px, Trimpot = 17 px
-    addParam(ParamWidget::create<CKSSThreeH>(Vec(11, 65), module, Folder::STAGE_PARAM, 1, 3, 2));
-    addParam(ParamWidget::create<RoundBlackKnob>(Vec(16, 105), module, Folder::GAIN_PARAM, 0.0, 14.0, 1.0));
-    addParam(ParamWidget::create<Trimpot>(Vec(21.5, 150), module, Folder::GAIN_ATT_PARAM, -1.0, 1.0, 0));
-    addParam(ParamWidget::create<RoundBlackKnob>(Vec(16, 185), module, Folder::SYM_PARAM, -1.0, 1.0, 0.0));
-    addParam(ParamWidget::create<Trimpot>(Vec(21.5, 230), module, Folder::SYM_ATT_PARAM, -1.0, 1.0, 0.0));
-
-    addInput(Port::create<PJ301MPort>(Vec(3, 320), Port::INPUT, module, Folder::GATE_INPUT));;
-    addInput(Port::create<PJ301MPort>(Vec(3, 276), Port::INPUT, module, Folder::GAIN_INPUT));;
-    addInput(Port::create<PJ301MPort>(Vec(30, 276), Port::INPUT, module, Folder::SYM_INPUT));;
-    addOutput(Port::create<PJ301MPort>(Vec(30,320), Port::OUTPUT, module, Folder::GATE_OUTPUT));
-}
-
-struct FolderMenuItem : MenuItem {
-    Folder *module;
-    void onAction(EventAction &e) override {
-	module->alternativeMode ^= true;
-    }
-    void step() override {
-	rightText = (module->alternativeMode) ? "✔" : "";
-	MenuItem::step();
-    }
-};
-
-Menu *FolderWidget::createContextMenu() {
-    Menu *menu = ModuleWidget::createContextMenu();
-
-    Folder *folder = dynamic_cast<Folder*>(module);
-    assert(folder);
-
-    menu->addChild(construct<MenuEntry>());
-    menu->addChild(construct<FolderMenuItem>(&FolderMenuItem::text, "Alternative Folding Algorithm", &FolderMenuItem::module, folder));
-
-    return menu;
-}
-
-Model *modelFolder = Model::create<Folder, FolderWidget>("repelzen", "folder", "Manifold", WAVESHAPER_TAG, DISTORTION_TAG);
+Model *modelFolder = createModel<Folder, FolderWidget>("refold");

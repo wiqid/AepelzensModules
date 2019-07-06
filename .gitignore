@@ -1,0 +1,5 @@
+*.[oa]
+*~
+/build
+/dist
+/plugin.dll
