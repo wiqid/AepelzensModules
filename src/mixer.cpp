@@ -123,7 +123,8 @@ void Mixer::process(const ProcessArgs &args) {
     float aux2RIn = inputs[AUX2_R_INPUT].getNormalVoltage(0.0f);
 
     for(int i=0;i<NUM_CHANNELS;i++) {
-    	float in = inputs[CH1_INPUT + i].getVoltage();
+        // sum polyphonic cables, as per vcv voltage standards, #5
+    	float in = inputs[CH1_INPUT + i].getVoltageSum();
 
     	if(muteTrigger[i].process(params[MUTE_PARAM + i].getValue())) {
     	    channels[i].mute = !channels[i].mute;
