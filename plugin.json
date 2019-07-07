@@ -26,7 +26,8 @@
       "name": "refold",
       "description": "wavefolder",
       "tags": [
-        "waveshaper"
+        "waveshaper",
+        "polyphonic"
       ]
     },
     {
