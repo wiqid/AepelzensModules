@@ -100,38 +100,42 @@ struct Folder : Module {
 };
 
 void Folder::process(const ProcessArgs &args) {
-    gain = clamp(params[GAIN_PARAM].getValue() + (inputs[GAIN_INPUT].getVoltage() * params[GAIN_ATT_PARAM].getValue()), 0.0f,14.0f);
-    sym = clamp(params[SYM_PARAM].getValue() + inputs[SYM_INPUT].getVoltage()/5.0 * params[SYM_ATT_PARAM].getValue(), -1.0f, 1.0f);
-    in = (inputs[GATE_INPUT].getVoltage()/5.0 + sym) * gain;
+    int channels = inputs[GATE_INPUT].getChannels(); // enable polyphony
+	for (int c = 0; c < channels; c++) {
+        gain = clamp(params[GAIN_PARAM].getValue() + (inputs[GAIN_INPUT].getPolyVoltage(c) * params[GAIN_ATT_PARAM].getValue()), 0.0f,14.0f);
+        sym = clamp(params[SYM_PARAM].getValue() + inputs[SYM_INPUT].getPolyVoltage(c)/5.0 * params[SYM_ATT_PARAM].getValue(), -1.0f, 1.0f);
+        in = (inputs[GATE_INPUT].getVoltage(c)/5.0 + sym) * gain;
 
-    if(++frame >= BUF_LEN) {
-	//upsampling
-	int outLen = 5 *BUF_LEN;
-	int inLen = BUF_LEN;
-	convUp.process(in_buffer, &inLen, out_buffer, &outLen);
+        if(++frame >= BUF_LEN) {
+            //upsampling
+            int outLen = 5 *BUF_LEN;
+            int inLen = BUF_LEN;
+            convUp.process(in_buffer, &inLen, out_buffer, &outLen);
 
-	//fold
-	for(int i=0;i<outLen;i++) {
-	    if(!alternativeMode) {
-		int stages = (int)(params[STAGE_PARAM].getValue())*2;
-		for (int y=0;y<stages;y++) {
-		    out_buffer[i].samples[0] = fold3(out_buffer[i].samples[0], threshold);
-		}
-	    }
-	    else {
-		out_buffer[i].samples[0] = fold(out_buffer[i].samples[0], threshold);
-	    }
-	    out_buffer[i].samples[0] = tanh(out_buffer[i].samples[0]);
-	}
+            //fold
+            for(int i=0;i<outLen;i++) {
+                if(!alternativeMode) {
+                    int stages = (int)(params[STAGE_PARAM].getValue())*2;
+                    for (int y=0;y<stages;y++) {
+                        out_buffer[i].samples[0] = fold3(out_buffer[i].samples[0], threshold);
+                    }
+                }
+                else {
+                    out_buffer[i].samples[0] = fold(out_buffer[i].samples[0], threshold);
+                }
+                out_buffer[i].samples[0] = tanh(out_buffer[i].samples[0]);
+            }
 
-	//downSampling
-	int foldedLen = BUF_LEN;
-	convDown.process(out_buffer, &outLen, folded_buffer, &foldedLen);
-	frame = 0;
+            //downSampling
+            int foldedLen = BUF_LEN;
+            convDown.process(out_buffer, &outLen, folded_buffer, &foldedLen);
+            frame = 0;
+        }
+
+        in_buffer[frame].samples[0] = in;
+        outputs[GATE_OUTPUT].setVoltage(folded_buffer[frame].samples[0] * 5.0, c);
     }
-
-    in_buffer[frame].samples[0] = in;
-    outputs[GATE_OUTPUT].setVoltage(folded_buffer[frame].samples[0] * 5.0);
+    outputs[GATE_OUTPUT].setChannels(channels);
 }
 
 struct FolderWidget : ModuleWidget {
