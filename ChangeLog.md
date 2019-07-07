@@ -4,3 +4,4 @@
 
 - rewin: normalize outputs to first input
 - rexmix: sum polyphonic inputs (#5)
+- refold: make polyphonic
