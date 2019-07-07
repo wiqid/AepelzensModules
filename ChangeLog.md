@@ -5,3 +5,4 @@
 - rewin: normalize outputs to first input
 - rexmix: sum polyphonic inputs (#5)
 - refold: make polyphonic
+- refold: use 4x oversampling instead of 192k to prevent non-integer conversion rate
