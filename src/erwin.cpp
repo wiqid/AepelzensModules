@@ -248,10 +248,10 @@ struct ErwinWidget : ModuleWidget {
         void onAction(const event::Action &e) override {
             json_t* rootJ = module->dataToJson();
             if(rootJ) {
-                char* path = osdialog_file(OSDIALOG_SAVE, NULL, "Erwin.json", NULL);
+                char* path = osdialog_file(OSDIALOG_SAVE, NULL, "rewin.json", NULL);
                 if(path) {
                     if (json_dump_file(rootJ, path, 0))
-                    DEBUG("Error: Can not export Erwin Scale file");
+                    DEBUG("Error: cannot export rewin scale file");
                 }
                 free(path);
             }
@@ -271,13 +271,13 @@ struct ErwinWidget : ModuleWidget {
                     // Check this here to not break compatibility with old (single scale) saves
                     json_t *gatesJ = json_object_get(rootJ, "notes");
                     if(!gatesJ || json_array_size(gatesJ) != 12 * NUM_SCALES) {
-                        osdialog_message(OSDIALOG_ERROR, OSDIALOG_OK, "Erwin: Invalid Input file");
+                        osdialog_message(OSDIALOG_ERROR, OSDIALOG_OK, "rewin: invalid input file");
                         return;
                     }
                     module->dataFromJson(rootJ);
                 }
                 else {
-                    osdialog_message(OSDIALOG_ERROR, OSDIALOG_OK, "Can't load file. See Logfile for details.");
+                    osdialog_message(OSDIALOG_ERROR, OSDIALOG_OK, "rewin: can't load file - see logfile for details");
                     DEBUG("Error: Can't import file %s", path);
                     DEBUG("Text: %s", error.text);
                     DEBUG("Source: %s", error.source);

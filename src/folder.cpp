@@ -1,7 +1,6 @@
 #include "repelzen.hpp"
 
 #define BUF_LEN 32
-#define FOLDER_SAMPLE_RATE 192000
 
 struct Folder : Module {
     enum ParamIds {
@@ -36,13 +35,16 @@ struct Folder : Module {
         configParam(Folder::SYM_PARAM, -1.0, 1.0, 0.0, "symmetry");
         configParam(Folder::SYM_ATT_PARAM, -1.0, 1.0, 0.0, "symmetry modulation");
 
-        convUp.setRates(APP->engine->getSampleRate(), FOLDER_SAMPLE_RATE);
-        convDown.setRates(FOLDER_SAMPLE_RATE, APP->engine->getSampleRate());
+        /* SampleRateConverter needs integer value, #6 */
+        int sr = APP->engine->getSampleRate();
+        convUp.setRates(sr, sr * 4);
+        convDown.setRates(sr * 4, sr);
     }
 
     void onSampleRateChange() override {
-        convUp.setRates(APP->engine->getSampleRate(), FOLDER_SAMPLE_RATE);
-        convDown.setRates(FOLDER_SAMPLE_RATE, APP->engine->getSampleRate());
+        int sr = APP->engine->getSampleRate();
+        convUp.setRates(sr, sr * 4);
+        convDown.setRates(sr * 4, sr);
     }
 
     json_t *dataToJson() override {
@@ -67,7 +69,6 @@ struct Folder : Module {
     dsp::SampleRateConverter<1> convDown;
 
     int frame = 0;
-    //smallest supported sampleRate in Rack is 44100 (upsample ratio = 4.35)
     dsp::Frame<1> in_buffer[BUF_LEN] = {};
     dsp::Frame<1> out_buffer[5*BUF_LEN] = {};
     dsp::Frame<1> folded_buffer[BUF_LEN] = {};
