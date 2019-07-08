@@ -18,8 +18,8 @@ inline int ceilN(float x) {
 
 template <typename T>
 static T tanh_pade(T x) {
-	// Padé approximant of tanh
-	x = simd::clamp(x, -5.f, 5.f);
+    // Padé approximant of tanh
+    x = simd::clamp(x, -5.f, 5.f);
     return (T(x * (135135 + simd::pow(x, 2) * (17325 + simd::pow(x, 2) * (378 + simd::pow(x, 2))))))
          / (T(135135 + simd::pow(x, 2) * (62370 + simd::pow(x, 2) * (3150 + 28 * simd::pow(x, 2)))));
 }
