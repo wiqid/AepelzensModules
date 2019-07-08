@@ -101,6 +101,7 @@ struct Folder : Module {
 };
 
 void Folder::process(const ProcessArgs &args) {
+    if (!outputs[GATE_OUTPUT].isConnected()) { return; }
     int channels = inputs[GATE_INPUT].getChannels(); // enable polyphony
 	for (int c = 0; c < channels; c++) {
         gain = clamp(params[GAIN_PARAM].getValue() + (inputs[GAIN_INPUT].getPolyVoltage(c) * params[GAIN_ATT_PARAM].getValue()), 0.0f,14.0f);
