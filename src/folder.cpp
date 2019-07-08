@@ -124,7 +124,7 @@ void Folder::process(const ProcessArgs &args) {
                 else {
                     out_buffer[i].samples[0] = fold(out_buffer[i].samples[0], threshold);
                 }
-                out_buffer[i].samples[0] = tanh(out_buffer[i].samples[0]);
+                out_buffer[i].samples[0] = tanh_pade(out_buffer[i].samples[0]);
             }
 
             //downSampling
