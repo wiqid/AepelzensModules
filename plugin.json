@@ -1,7 +1,7 @@
 {
   "slug": "repelzen",
   "name": "repelzen",
-  "version": "1.1.0_beta2_pre0708",
+  "version": "1.1.0_beta2_pre0711",
   "license": "GPL-3.0-or-later",
   "brand": "repelzen",
   "author": "wiqid",
@@ -14,7 +14,7 @@
   "modules": [
     {
       "slug": "reburst",
-      "name": "reburst",
+      "name": "re-burst",
       "description": "burst generator",
       "tags": [
         "clock modulator",
@@ -23,7 +23,7 @@
     },
     {
       "slug": "refold",
-      "name": "refold",
+      "name": "re-fold",
       "description": "wavefolder",
       "tags": [
         "waveshaper",
@@ -32,7 +32,7 @@
     },
     {
       "slug": "rewin",
-      "name": "rewin",
+      "name": "re-win",
       "description": "4 channel quantizer",
       "tags": [
         "quantizer",
@@ -50,7 +50,7 @@
     },
     {
       "slug": "retrig",
-      "name": "retrig",
+      "name": "re-trig",
       "description": "cv to trigger utility",
       "tags": [
         "utility"
