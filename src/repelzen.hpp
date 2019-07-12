@@ -9,6 +9,7 @@ extern Plugin *pluginInstance;
 // extern Model *modelGateSeq;
 // extern Model *modelDice;
 // extern Model *modelWalker;
+extern Model *modelBlank;
 extern Model *modelBurst;
 extern Model *modelFolder;
 extern Model *modelErwin;

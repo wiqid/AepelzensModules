@@ -1,7 +1,7 @@
 {
   "slug": "repelzen",
   "name": "repelzen",
-  "version": "1.1.0_beta2_pre0711",
+  "version": "1.1.0_beta2_pre0712",
   "license": "GPL-3.0-or-later",
   "brand": "repelzen",
   "author": "wiqid",
@@ -12,6 +12,14 @@
   "sourceUrl": "https://github.com/wiqid/repelzen",
   "donateUrl": "https://paypal.me/wiqid",
   "modules": [
+    {
+      "slug": "reblank",
+      "name": "re-blank",
+      "description": "4hp blank panel with logo",
+      "tags": [
+        "blank"
+      ]
+    },
     {
       "slug": "reburst",
       "name": "re-burst",

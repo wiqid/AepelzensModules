@@ -7,3 +7,5 @@
 - refold: make polyphonic
 - refold: use 4x oversampling instead of 192k to prevent non-integer conversion rate (#6)
 - refold: use faster math
+- reblank: new module
+- rename modules publicly to hyphenated

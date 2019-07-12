@@ -10,6 +10,7 @@ void init(rack::Plugin *p) {
 	// p->addModel(modelGateSeq);
 	// p->addModel(modelDice);
 	// p->addModel(modelWalker);
+	p->addModel(modelBlank);
 	p->addModel(modelBurst);
 	p->addModel(modelFolder);
 	p->addModel(modelErwin);
