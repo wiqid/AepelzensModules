@@ -69,7 +69,8 @@ struct Mixer : Module {
         maHp.setCutoff(35.0f, 0.8f, AeFilterType::AeHIGHPASS);
         maHs.setParams(12000.0f, 0.8f, -2.0f, AeEQType::AeHIGHSHELVE);
 
-        meter.dBInterval = 10.0f;
+        //meter.dBInterval = 10.0f;
+		lightDivider.setDivision(512);
     }
 
     struct mixerChannel {
@@ -88,7 +89,9 @@ struct Mixer : Module {
     };
 
     mixerChannel channels[NUM_CHANNELS];
-    dsp::VuMeter meter;  // DEPRECATED - TODO: REPLACE WITH VUMETER2
+    dsp::VuMeter2 meterL;
+    dsp::VuMeter2 meterR;
+	dsp::ClockDivider lightDivider;
     dsp::SchmittTrigger muteTrigger[NUM_CHANNELS];
 
     //master EQ
@@ -205,14 +208,15 @@ void Mixer::process(const ProcessArgs &args) {
     outputs[AUX2_L_OUTPUT].setVoltage(aux2L);
     outputs[AUX2_R_OUTPUT].setVoltage(aux2R);
 
-    //meter
-    for (int i = 0; i < 6; i++){
-        // DEPRECATED - TODO: REPLACE WITH VUMETER2
-    	meter.setValue(outL / 5.0f);
-    	lights[METER_L_LIGHT + i].setBrightnessSmooth(meter.getBrightness(i));
-    	meter.setValue(outR / 5.0f);
-    	lights[METER_R_LIGHT + i].setBrightnessSmooth(meter.getBrightness(i));
-    }
+    // vuMeters
+	meterL.process(args.sampleTime, outL / 5.0f);
+	meterR.process(args.sampleTime, outR / 5.0f);
+	if (lightDivider.process()) {
+	    for (int i = 0; i < 6; i++) {
+	    	lights[METER_L_LIGHT + i].setBrightness(meterL.getBrightness(-10.f * (i + 1), -10.f * i));
+	    	lights[METER_R_LIGHT + i].setBrightness(meterR.getBrightness(-10.f * (i + 1), -10.f * i));
+	    }
+	}
 }
 
 struct MixerWidget : ModuleWidget {
