@@ -1,5 +1,9 @@
 # ChangeLog for repelzen modules
 
+## 1.1.0 release
+
+tag beta2 as release, since no new issues were reported
+
 ## 1.1.0_beta2
 
 - rewin: normalize outputs to first input
