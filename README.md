@@ -1,7 +1,8 @@
-# VCV Rack plugins
+# VCV Rack modules
 
-**This is a re-release in progress of Aepelzen's modules with a redesign by Pyer
-and ported to Rack version 1. We plan on getting this into the VCV Rack Plugin Manager.**
+**This is a re-release of Aepelzen's modules with a redesign by Pyer
+and ported to Rack version 1. This plugin is now available in the
+[VCV Rack Plugin Manager](https://vcvrack.com/plugins.html#repelzen).**
 
 ![logo](https://github.com/wiqid/repelzen/blob/v1/images/animated-logo.gif)
 
@@ -91,7 +92,7 @@ knob sets the channel length, the lower one the playback mode (these work like
 in QuadSeq). The button in the upper left corner resets the playback positions.
 -->
 
-## reburst
+## re-burst
 
 A Burst generator. For every received trigger a number of triggers and an
 accompanying CV signal is sent out. Repetitions and time set the number of
@@ -109,12 +110,12 @@ cutoff for delay style effects etc. Currently the following modes are supported:
 * Alternating1: output alternates between positive and negative values. The magnitude is only increased after 2 pulses (so you get 0, 1, -1, 2, -2 ...)
 * Alternating2: output alternates between positive and negative values. The magnitude is increased after every pulse (so you get 0, 1, -2, 3, -4 ...)
 * Randomp: positive random values
-* Randomn: negative  random values
+* Randomn: negative random values
 * Random Walk
 * Random
 
 
-## refold
+## re-fold
 
 A wavefolder. Works best with simple input signals like sine or triangle waves.
 The fold and symmetry inputs work well with CV and audio signals. The output
@@ -128,7 +129,7 @@ number of folds.
 Note: this module shifts the phase of the input-signal (because of the upsampling)
 
 <!--
-## rewalk
+## re-walk
 
 A CV generator that simulates a random walk. At every step the CV output changes
 by either plus or minus stepsize. The decision is affected by the Symmetry
@@ -139,7 +140,7 @@ at the range boundaries. There are 3 possible modes:
 * Reset to zero
 * Reset to random value within ± range/2 (this is also affected by the Symmetry parameter)
 -->
-## rewin
+## re-win
 
 A 4-channel scale-quantizer with up to 16 user-definable scales. All
 inputs/outputs use the same scale, however you can transpose every channel
@@ -151,6 +152,6 @@ with the patch). The menu also allows to change the Quantizer mode. (Down used
 to be the only mode in older version and is still the default for backwards
 compatibility)
 
-## retrig
+## re-trig
 
 A CV to Trigger utility.
