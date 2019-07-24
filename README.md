@@ -6,6 +6,8 @@ and ported to Rack version 1. This plugin is now available in the
 
 ![logo](https://github.com/wiqid/repelzen/blob/v1/images/animated-logo.gif)
 
+![screenshot](https://github.com/wiqid/repelzen/blob/master/images/repelzen-1.1.0.jpg)
+
 ## rexmix
 
 You are probably wondering if we really need another mixer. There are already
