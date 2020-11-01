@@ -1,6 +1,7 @@
 #include "repelzen.hpp"
 
 #define NUM_CHANNELS 4
+#define MAX_POLY 16
 
 struct Werner : Module {
     enum ParamIds {
@@ -28,8 +29,8 @@ struct Werner : Module {
 
     void process(const ProcessArgs &args) override;
 
-    dsp::PulseGenerator gatePulse[NUM_CHANNELS];
-    float lastValue[NUM_CHANNELS];
+    dsp::PulseGenerator gatePulse[NUM_CHANNELS][MAX_POLY];
+    float lastValue[NUM_CHANNELS][MAX_POLY];
     int res = 16;
     float minDelta = 0;
     int frame = 0;
@@ -42,20 +43,27 @@ void Werner::process(const ProcessArgs &args) {
     minDelta = params[DELTA_PARAM].getValue() * 2.0f;
 
     if(++frame > res) {
-	for(int i=0; i<NUM_CHANNELS;i++) {
-	    float value = inputs[CV_INPUT + i].getVoltage();
+        for(int i=0; i<NUM_CHANNELS;i++) {
+            int currentPolyphony = std::max(1, inputs[CV_INPUT + i].getChannels());
+            outputs[GATE_OUTPUT + i].setChannels(currentPolyphony);
+            for (int c = 0; c < currentPolyphony; c++) {
+                float value = inputs[CV_INPUT + i].getPolyVoltage(c);
 
-	    if(abs(value - lastValue[i]) > minDelta) {
-            gatePulse[i].trigger(0.01);
-	    }
+                if(abs(value - lastValue[i][c]) > minDelta) {
+                    gatePulse[i][c].trigger(0.01);
+                }
 
-	    lastValue[i] = value;
-	}
-	frame = 0;
+                lastValue[i][c] = value;
+            }
+        }
+        frame = 0;
     }
 
     for(int i=0; i<NUM_CHANNELS;i++) {
-	outputs[GATE_OUTPUT + i].setVoltage(gatePulse[i].process(1.0 / args.sampleRate) ? 10.0 : 0.0);
+        int currentPolyphony = std::max(1, inputs[CV_INPUT + i].getChannels());
+        for (int c = 0; c < currentPolyphony; c++) {
+	        outputs[GATE_OUTPUT + i].setVoltage(gatePulse[i][c].process(1.0 / args.sampleRate) ? 10.0 : 0.0, c);
+        }
     }
 }
 
