@@ -117,48 +117,53 @@ void Erwin::process(const ProcessArgs &args) {
             inputs[IN_INPUT + y].setVoltage(inputs[IN_INPUT].getVoltage(), 0);
         }
 
-        octave = trunc(inputs[IN_INPUT+y].getVoltage());
-        freq = inputs[IN_INPUT+y].getVoltage() - octave;
-        // limit to 4 octaves
-        transposeOctave = clamp((int)round(inputs[TRANSPOSE_INPUT].getVoltage() / 2.5)
-            + (int)round(params[CHANNEL_TRANSPOSE_PARAM + y].getValue()),-4, 4);
+        int currentPolyphony = std::max(1, inputs[IN_INPUT + y].getChannels());
+        outputs[OUT_OUTPUT + y].setChannels(currentPolyphony);
 
-        // index of the quantized note
-        int index = 0;
+        for (int c = 0; c < currentPolyphony; c++) {
+            octave = trunc(inputs[IN_INPUT+y].getPolyVoltage(c));
+            freq = inputs[IN_INPUT+y].getPolyVoltage(c) - octave;
+            // limit to 4 octaves
+            transposeOctave = clamp((int)round(inputs[TRANSPOSE_INPUT].getPolyVoltage(c) / 2.5)
+                + (int)round(params[CHANNEL_TRANSPOSE_PARAM + y].getValue()),-4, 4);
 
-        int semiUp = ceilN(freq * 12);
-        int semiDown = (int)trunc(freq * 12);
-        uint8_t stepsUp = 0;
-        uint8_t stepsDown = 0;
+            // index of the quantized note
+            int index = 0;
 
-        while(!currentScale[modN(semiUp + stepsUp,12)] && stepsUp < 12)
-        stepsUp++;
-        while(!currentScale[modN(semiDown - stepsDown, 12)] && stepsDown < 12)
-        stepsDown++;
+            int semiUp = ceilN(freq * 12);
+            int semiDown = (int)trunc(freq * 12);
+            uint8_t stepsUp = 0;
+            uint8_t stepsDown = 0;
 
-        // Reset for empty scales to avoid transposing by 1 octave
-        stepsUp %= 12;
-        stepsDown %= 12;
+            while(!currentScale[modN(semiUp + stepsUp,12)] && stepsUp < 12)
+            stepsUp++;
+            while(!currentScale[modN(semiDown - stepsDown, 12)] && stepsDown < 12)
+            stepsDown++;
 
-        switch(mode) {
-        case QModes::UP:
-            index = semiUp + stepsUp;
-            break;
-        case QModes::DOWN:
-            index = semiDown - stepsDown;
-            break;
-        case QModes::NEAREST:
-            if (stepsUp < stepsDown)
-            index = semiUp + stepsUp;
-            else
-            index = semiDown - stepsDown;
-            break;
+            // Reset for empty scales to avoid transposing by 1 octave
+            stepsUp %= 12;
+            stepsDown %= 12;
+
+            switch(mode) {
+            case QModes::UP:
+                index = semiUp + stepsUp;
+                break;
+            case QModes::DOWN:
+                index = semiDown - stepsDown;
+                break;
+            case QModes::NEAREST:
+                if (stepsUp < stepsDown)
+                index = semiUp + stepsUp;
+                else
+                index = semiDown - stepsDown;
+                break;
+            }
+
+            if(transposeSemi)
+            index += transposeSemi;
+
+            outputs[OUT_OUTPUT + y].setVoltage(octave + index * 1/12.0 + transposeOctave, c);
         }
-
-        if(transposeSemi)
-        index += transposeSemi;
-
-        outputs[OUT_OUTPUT + y].setVoltage(octave + index * 1/12.0 + transposeOctave);
 
     }
 
